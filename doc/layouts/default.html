@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html lang=cs-cz>
+<header>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width, initial-scale=1.0">
+	<title>{{var.title}}</title>
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans&amp;subset=latin,latin-ext" rel=stylesheet />
+	<link href="https://fonts.googleapis.com/css?family=Bree+Serif&amp;subset=latin,latin-ext" rel=stylesheet />
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+	<link rel="stylesheet" href="assets/default.css" />
+	<link rel="stylesheet" href="assets/syntaxhighlighter/shcore.css" />
+	<link rel="stylesheet" href="assets/syntaxhighlighter/shthemedefault.css" />
+</header>
+
+<body>
+	<div id="family">
+		<div><a href="https://www.miroslavholec.cz">Miroslav Holec</a> <a href="https://www.dotnettalks.cz">DotNET Talks</a>
+			<a href="https://www.dotnetnews.cz">Dotnet News</a> <a href="https://www.mirekholec.cz">Cestopisy</a> <a href="https://www.miroslavholec.com">English
+				CV</a></div>
+	</div>
+
+	<div id="page">
+
+		<header>
+			<div class="inner">
+				<a href="index.html"><h1>Miroslav Holec</h1></a>
+			</div>
+			<nav>
+				<ul class="main-menu">
+					<li class="home"><a href="index.html">Úvod</a></li>
+					<li><a href="extra-page.html">Extra Page</a></li>
+					<li><a href="apic.html">Projekt Apic</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<main>
+			<section class="padding">
+				{{body}}
+			</section>
+		</main>
+	</div>
+</body>
+
+{{include.scripts}}
+{{include.google-analytics}}
+
+</html>

@@ -1,0 +1,13 @@
+<script src="assets/syntaxhighlighter/shcore.js"></script>
+<script src="assets/syntaxhighlighter/shbrushcsharp.js"></script>
+<script src="assets/syntaxhighlighter/shbrushsql.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("pre").addClass("brush: csharp;");
+        SyntaxHighlighter.defaults['smart-tabs'] = false;
+        SyntaxHighlighter.defaults['toolbar'] = false;
+        SyntaxHighlighter.defaults['gutter'] = false;
+        SyntaxHighlighter.all();
+    });
+</script>
