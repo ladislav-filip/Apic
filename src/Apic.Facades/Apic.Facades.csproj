@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.8.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Apic.Common\Apic.Common.csproj" />
+    <ProjectReference Include="..\Apic.Contracts\Apic.Contracts.csproj" />
+    <ProjectReference Include="..\Apic.Data\Apic.Data.csproj" />
+    <ProjectReference Include="..\Apic.Entities\Apic.Entities.csproj" />
+    <ProjectReference Include="..\Apic.Services\Apic.Services.csproj" />
+  </ItemGroup>
+
+</Project>
