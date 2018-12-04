@@ -16,7 +16,7 @@ namespace Apic.Web
 				.UseApplicationInsights()
 				.UseStartup<Startup>()
 				.Build()
-				.MigrateDatabase()
+				.CustomizeDatabaseMigration()
 				.RunAsync();
 		}
 	}

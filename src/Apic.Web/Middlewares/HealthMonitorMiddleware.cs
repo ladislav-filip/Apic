@@ -15,16 +15,14 @@ namespace Apic.Web.Middlewares
 	{
 		private readonly RequestDelegate next;
 		private readonly string path;
-		private readonly ApicDbContext apicDbContext;
 
-		public HealthMonitorMiddleware(RequestDelegate next, ApicDbContext apicDbContext, string path)
+		public HealthMonitorMiddleware(RequestDelegate next,  string path)
 		{
 			this.next = next;
-			this.apicDbContext = apicDbContext;
 			this.path = path;
 		}
 
-		public async Task Invoke(HttpContext context)
+		public async Task Invoke(HttpContext context, ApicDbContext apicDbContext)
 		{
 			if (context.Request.Path.Value == path)
 			{

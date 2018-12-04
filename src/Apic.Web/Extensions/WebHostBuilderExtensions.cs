@@ -18,7 +18,7 @@ namespace Apic.Web.Extensions
 			return webHost;
 		}
 
-		public static IWebHost MigrateDatabase(this IWebHost webHost)
+		public static IWebHost CustomizeDatabaseMigration(this IWebHost webHost)
 		{
 			//using (IServiceScope scope = webHost.Services.CreateScope())
 			//{

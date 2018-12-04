@@ -64,7 +64,7 @@ namespace Apic.Web.Middlewares
 				logger.LogError("Request execution failed", ex);
 
 				ClearResponse(context, StatusCodes.Status500InternalServerError);
-				var errorDetails = GetExceptionDetails(context, ex);
+				ProblemDetails errorDetails = GetExceptionDetails(context, ex);
 
 				await WriteProblemDetails(context, errorDetails);
 			}

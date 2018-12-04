@@ -11,7 +11,7 @@ namespace Apic.Web.ActionFilters
 		{
 			if (!context.ModelState.IsValid)
 			{
-				var message = ValidationProblemDetails.FromErrors(context.ModelState.ToValidationErrorMessages());
+				ValidationProblemDetails message = ValidationProblemDetails.FromErrors(context.ModelState.ToValidationErrorMessages());
 				context.Result = new BadRequestObjectResult(message);
 			}
 		}
