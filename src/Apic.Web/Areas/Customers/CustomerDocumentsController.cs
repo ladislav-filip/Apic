@@ -45,7 +45,6 @@ namespace Apic.Web.Areas.Customers
 		[Route("customers/{customerId}/documents/big")]
 		[HttpPost]
 		[ProducesResponseType(typeof(DataResult<Document>), (int)HttpStatusCode.Created)]
-		[Consumes("multipart/form-data")]
 		[RequestFormLimits(MultipartBodyLengthLimit = 1073741824)] // 1 GB
 		[RequestSizeLimit(1073741824)] // 1 GB
 		[DisableFormValueModelBinding]
@@ -56,12 +55,15 @@ namespace Apic.Web.Areas.Customers
 				ContentType = Request.ContentType,
 			};
 
-			await Request.StreamFile(document.Datastream);
+			using (document.Datastream = new MemoryStream())
+			{
+				await Request.StreamFile(document.Datastream);
 
-			DataResult<Document> result = await documentFacade.UploadDocument(customerId, document, cancellationToken);
+				DataResult<Document> result = await documentFacade.UploadDocument(customerId, document, cancellationToken);
 
-			return ErrorResult(result) ??
-			       Ok(result);
+				return ErrorResult(result) ??
+					   Ok(result);
+			}
 		}
 	}
 }
