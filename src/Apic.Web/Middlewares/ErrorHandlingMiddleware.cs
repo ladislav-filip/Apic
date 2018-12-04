@@ -64,7 +64,7 @@ namespace Apic.Web.Middlewares
 				logger.LogError("Request execution failed", ex);
 
 				ClearResponse(context, StatusCodes.Status500InternalServerError);
-				ProblemDetails errorDetails = GetExceptionDetails(context, ex);
+				object errorDetails = GetExceptionDetails(context, ex);
 
 				await WriteProblemDetails(context, errorDetails);
 			}
@@ -115,6 +115,11 @@ namespace Apic.Web.Middlewares
 
 		private ProblemDetails GetExceptionDetails(HttpContext context, Exception exception)
 		{
+			if (exception is OperationCanceledException)
+			{
+				return ProblemDetails.FromMessage(HttpStatusCode.BadRequest, "Request was cancelled");
+			}
+
 			return ProblemDetails.FromException(exception, host.IsDevelopment());
 		}
 
