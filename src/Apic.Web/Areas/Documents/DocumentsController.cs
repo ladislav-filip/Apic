@@ -13,9 +13,9 @@ namespace Apic.Web.Areas.Documents
 	[Area("documents")]
 	public class CustomerDocumentsController : ApiControllerBase
 	{
-		private readonly DocumentFacade documentFacade;
+		private readonly IDocumentFacade documentFacade;
 
-		public CustomerDocumentsController(DocumentFacade documentFacade)
+		public CustomerDocumentsController(IDocumentFacade documentFacade)
 		{
 			this.documentFacade = documentFacade;
 		}
