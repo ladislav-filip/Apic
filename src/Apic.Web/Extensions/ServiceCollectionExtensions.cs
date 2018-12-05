@@ -74,7 +74,7 @@ namespace Apic.Web.Extensions
 
 			mvc.AddXmlSerializerFormatters();
 			
-			mvc.SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+			mvc.SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
 			mvc.AddJsonOptions(jsonOptions =>
 			{
