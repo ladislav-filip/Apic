@@ -7,7 +7,7 @@ namespace Apic.Common.Attributes
 	/// <summary>
 	/// Marker for DependencyInjection
 	/// </summary>
-	public sealed class ServiceAttribute : Attribute
+	public sealed class ScopedServiceAttribute : Attribute
 	{
 	}
 }

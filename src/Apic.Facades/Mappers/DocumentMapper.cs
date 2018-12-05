@@ -17,7 +17,7 @@ namespace Apic.Facades.Mappers
 		DocumentDbo Map(int customerId, DocumentCreate document);
 	}
 
-	[Service]
+	[ScopedService]
 	public class DocumentMapper : IDocumentMapper
 	{
 		private readonly AzureStorageService azureStorageService;

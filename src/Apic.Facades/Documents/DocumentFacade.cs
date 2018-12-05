@@ -22,7 +22,7 @@ namespace Apic.Facades.Documents
 		Task<DataResult<Document>> UploadDocument(int customerId, DocumentCreate createRequest, CancellationToken cancellationToken);
 	}
 
-	[Service]
+	[ScopedService]
 	public class DocumentFacade : IDocumentFacade
 	{
 		private readonly ApicDbContext dbContext;

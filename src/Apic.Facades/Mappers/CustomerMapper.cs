@@ -16,7 +16,7 @@ namespace Apic.Facades.Mappers
 		Customer Map(CustomerDbo customerDbo);
 	}
 
-	[Service]
+	[ScopedService]
 	public class CustomerMapper : ICustomerMapper
 	{
 		public async Task<List<Customer>> Map(IQueryable<CustomerDbo> customers)

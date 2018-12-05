@@ -2,8 +2,8 @@
 using Apic.DependencyInjection;
 using Apic.Web.Extensions;
 using Apic.Web.Middlewares;
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
+using Castle.Windsor;
+using Castle.Windsor.MsDependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -25,7 +25,6 @@ namespace Apic.Web
 
 		public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-	        services.AddAutofac();
 	        services.AddApplicationInsightsTelemetry(configuration);
 	        services.AddResponseCaching();
 	        services.AddCustomizedCors();
@@ -35,11 +34,9 @@ namespace Apic.Web
 			services.AddCustomizedApiBehaviorOptions();
 			services.AddCustomizedMvc();
 
-			ContainerBuilder builder = new ContainerBuilder();
-	        builder.RegisterServices(hostingEnvironment, configuration);
-	        builder.Populate(services);
-
-	        return new AutofacServiceProvider(builder.Build());
+			WindsorContainer container = new WindsorContainer();
+			container = container.RegisterServices(hostingEnvironment, configuration);
+			return WindsorRegistrationHelper.CreateServiceProvider(container, services);
 		}
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)

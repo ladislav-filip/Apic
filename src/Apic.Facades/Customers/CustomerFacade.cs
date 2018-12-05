@@ -22,7 +22,7 @@ namespace Apic.Facades.Customers
 		Task<Result> Delete(int customerId);
 	}
 
-	[Service]
+	[ScopedService]
 	public class CustomerFacade : ICustomerFacade
 	{
 		private readonly ApicDbContext dbContext;
