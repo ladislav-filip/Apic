@@ -19,9 +19,9 @@ Současný stav projektu je ve fázi prototypu.
 
 ## Technologie
 
-- ASP.NET Core 2.1
-- EF Core 2.1
-- Autofac 4.8
+- ASP.NET Core 2.2
+- EF Core 2.2
+- Windsor Castle 4.2
 - Swashbuckle 4.0
 - MSTest, Moq, FluentAssertions
 
