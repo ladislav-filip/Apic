@@ -90,6 +90,15 @@ namespace Apic.Web.Extensions
 
 			mvc.SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+			mvc.ConfigureApiBehaviorOptions(options =>
+			{
+				options.SuppressModelStateInvalidFilter = false;
+				options.SuppressConsumesConstraintForFormFileParameters = false;
+				options.SuppressInferBindingSourcesForParameters = false;
+				options.SuppressMapClientErrors = false;
+				options.SuppressUseValidationProblemDetailsForInvalidModelStateResponses = false;
+			});
+
 			mvc.AddJsonOptions(jsonOptions =>
 			{
 				if (jsonOptions.SerializerSettings.ContractResolver != null)
@@ -99,18 +108,6 @@ namespace Apic.Web.Extensions
 						NamingStrategy = new CamelCaseNamingStrategy(),
 					};
 				}
-			});
-
-			return services;
-		}
-
-		public static IServiceCollection AddCustomizedApiBehaviorOptions(this IServiceCollection services)
-		{
-			services.Configure<ApiBehaviorOptions>(options =>
-			{
-				options.SuppressModelStateInvalidFilter = false;
-				options.SuppressConsumesConstraintForFormFileParameters = false;
-				options.SuppressInferBindingSourcesForParameters = false;
 			});
 
 			return services;

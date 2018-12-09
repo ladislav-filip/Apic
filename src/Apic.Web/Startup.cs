@@ -34,7 +34,6 @@ namespace Apic.Web
 			services.AddCustomizedSwagger(configuration);
 		    services.AddCustomizedDbContext(configuration);
 		    services.AddCustomizedOptions(configuration);
-			services.AddCustomizedApiBehaviorOptions();
 			services.AddCustomizedMvc();
 
 			WindsorContainer container = new WindsorContainer();
