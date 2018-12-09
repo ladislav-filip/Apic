@@ -18,6 +18,18 @@ namespace Apic.Web.Extensions
 			return webHost;
 		}
 
+		public static IWebHostBuilder CustomizeHealtchCheck(this IWebHostBuilder webHost)
+		{
+			webHost = webHost.UseBeatPulse(options =>
+			{
+				options.ConfigurePath("health")
+					.ConfigureTimeout(1500)
+					.ConfigureDetailedOutput(true, true);
+			});
+
+			return webHost;
+		}
+
 		public static IWebHost CustomizeDatabaseMigration(this IWebHost webHost)
 		{
 			//using (IServiceScope scope = webHost.Services.CreateScope())

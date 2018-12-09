@@ -2,6 +2,7 @@
 using Apic.DependencyInjection;
 using Apic.Web.Extensions;
 using Apic.Web.Middlewares;
+using BeatPulse.UI;
 using Castle.Windsor;
 using Castle.Windsor.MsDependencyInjection;
 using Microsoft.AspNetCore.Builder;
@@ -24,13 +25,15 @@ namespace Apic.Web
 		}
 
 		public IServiceProvider ConfigureServices(IServiceCollection services)
-        {
-	        services.AddApplicationInsightsTelemetry(configuration);
-	        services.AddResponseCaching();
-	        services.AddCustomizedCors();
+		{
+		    services.AddApplicationInsightsTelemetry(configuration);
+			services.AddBeatPulseUI();
+			services.AddCustomizedBeatPulseHealthCheck(configuration);
+		    services.AddResponseCaching();
+		    services.AddCustomizedCors();
 			services.AddCustomizedSwagger(configuration);
-	        services.AddCustomizedDbContext(configuration);
-	        services.AddCustomizedOptions(configuration);
+		    services.AddCustomizedDbContext(configuration);
+		    services.AddCustomizedOptions(configuration);
 			services.AddCustomizedApiBehaviorOptions();
 			services.AddCustomizedMvc();
 
@@ -43,9 +46,9 @@ namespace Apic.Web
         {
 	        loggerFactory.AddApplicationInsights(app.ApplicationServices);
 
+	        app.UseBeatPulseUI();
 	        app.UseResponseCaching();
 	        app.UseCustomizedExceptionHandling();
-	        app.UseCustomizedHealthMonitor("/hc");
 	        app.UseCustomizedSwagger();
 	        app.UseCustomizedCors();
 			app.UseMvc();

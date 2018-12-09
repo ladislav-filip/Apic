@@ -3,6 +3,7 @@ using Apic.Common.Configuration;
 using Apic.Data.Context;
 using Apic.Web.ActionFilters;
 using Apic.Web.Cors;
+using BeatPulse;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,11 +17,24 @@ namespace Apic.Web.Extensions
 {
 	public static class ServiceCollectionExtensions
 	{
-		public static IServiceCollection AddCustomizedSwagger(this IServiceCollection services, IConfiguration configuration)
+		public static IServiceCollection AddCustomizedSwagger(this IServiceCollection services,
+			IConfiguration configuration)
 		{
 			services.AddSwaggerGen(c =>
 			{
 				c.SwaggerDoc("v1", new Info { Title = "API Documentation", Version = "v1" });
+			});
+
+			return services;
+		}
+
+		public static IServiceCollection AddCustomizedBeatPulseHealthCheck(this IServiceCollection services, IConfiguration configuration)
+		{
+			string sqlConnectionString = configuration.GetConnectionString("Default");
+
+			services.AddBeatPulse(setup =>
+			{
+				setup.AddSqlServer(sqlConnectionString);
 			});
 
 			return services;
@@ -58,7 +72,7 @@ namespace Apic.Web.Extensions
 			{
 				options.ReturnHttpNotAcceptable = true;
 				options.RespectBrowserAcceptHeader = true;
-				
+
 				options.FormatterMappings.SetMediaTypeMappingForFormat("xml", MediaTypeHeaderValue.Parse("application/xml"));
 				options.FormatterMappings.SetMediaTypeMappingForFormat("config", MediaTypeHeaderValue.Parse("application/xml"));
 				options.FormatterMappings.SetMediaTypeMappingForFormat("js", MediaTypeHeaderValue.Parse("application/json"));
@@ -73,7 +87,7 @@ namespace Apic.Web.Extensions
 			});
 
 			mvc.AddXmlSerializerFormatters();
-			
+
 			mvc.SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
 			mvc.AddJsonOptions(jsonOptions =>

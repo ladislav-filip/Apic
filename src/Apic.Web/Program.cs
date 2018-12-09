@@ -12,6 +12,7 @@ namespace Apic.Web
 			await WebHost
 				.CreateDefaultBuilder(args)
 				.CustomizeConfigurationFiles()
+				.CustomizeHealtchCheck()
 				.CustomizeLogging()
 				.UseApplicationInsights()
 				.UseStartup<Startup>()
