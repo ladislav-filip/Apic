@@ -11,8 +11,7 @@ Repositář obsahuje zdrojové kódy solution, kterou je možné použít jako v
 📄📄📄📄📄📄📄📄📄📄📄
 <div>
   <h2><a href="https://www.miroslavholec.cz">Webové API na zakázku</a></h2>
-  <p>
-  <code>Chystáte se napsat vlastní webové API? Nedělejte chyby, které udělaly tisíce vývojářů. Využijte mé služby a navrhněme 
+  <p><code>Chystáte se napsat vlastní webové API? Nedělejte chyby, které udělaly tisíce vývojářů. Využijte mé služby a navrhněme 
     skvělé API společnými silami. Poskytuji konzultace, školení, workshopy i vývojářskou kapacitu pro návrh architektury
     vašeho budoucího API, na kterém se vám bude dobře stavět.</code>
   </p>
