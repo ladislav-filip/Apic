@@ -6,22 +6,6 @@
 
 Repositář obsahuje zdrojové kódy solution, kterou je možné použít jako výchozí šablonu pro vývoj RESTového Web API postaveného na technologii ASP.NET Core.
 
-<p>&nbsp;</p>
-
-📄📄📄📄📄📄📄📄📄📄📄
-<div>
-  <h2><a href="https://www.miroslavholec.cz">Webové API na zakázku</a></h2>
-  <p><code>Chystáte se napsat vlastní webové API? Nedělejte chyby, které udělaly tisíce vývojářů. Využijte mé služby a navrhneme 
-    skvělé Web API společnými silami. Poskytuji konzultace, školení, workshopy i vývojářskou kapacitu pro návrh architektury
-    vašeho budoucího API, na kterém se vám bude dobře stavět.</code>
-  </p>
-  <p><a href="https://www.miroslavholec.cz"> 👉 <strong>Více o mně najdete na miroslavholec.cz</strong></a></p>
-</div>
-
-📄📄📄📄📄📄📄📄📄📄📄
-
-<p>&nbsp;</p>
-
 <h2>Repositář se skládá ze dvou částí:</h2>
 
 - **doc** - dokumentace, kompilovaná do podoby webu **[restapi.cz](https://www.restapi.cz)**
@@ -42,6 +26,25 @@ Současný stav projektu je ve fázi prototypu.
 - Windsor Castle 4.2
 - Swashbuckle 4.0
 - MSTest, Moq, FluentAssertions
+
+
+<p>&nbsp;</p>
+
+📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄
+<div>
+  <h2><a href="https://www.miroslavholec.cz">Webové API na zakázku</a></h2>
+  <p><code>Chystáte se napsat vlastní webové API? Nedělejte chyby, které udělaly tisíce vývojářů. Využijte mé služby a navrhneme 
+    skvělé Web API společnými silami. Poskytuji konzultace, školení, workshopy i vývojářskou kapacitu pro návrh architektury
+    vašeho budoucího API, na kterém se vám bude dobře stavět.</code>
+  </p>
+  <p><a href="https://www.miroslavholec.cz"> 👉 <strong>Více o mně najdete na miroslavholec.cz</strong></a></p>
+</div>
+
+📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄
+
+<p>&nbsp;</p>
+
+
 
 ## Guidelines
 
