@@ -33,9 +33,9 @@ Současný stav projektu je ve fázi prototypu.
 📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄
 <div>
   <h2><a href="https://www.miroslavholec.cz">Webové API na zakázku</a></h2>
-  <p><code>Chystáte se napsat vlastní webové API? Nedělejte chyby, které udělaly tisíce vývojářů. Využijte mé služby a navrhneme 
+  <p><q>Chystáte se napsat vlastní webové API? Nedělejte chyby, které udělaly tisíce vývojářů. Využijte mé služby a navrhneme 
     skvělé Web API společnými silami. Poskytuji konzultace, školení, workshopy i vývojářskou kapacitu pro návrh architektury
-    vašeho budoucího API, na kterém se vám bude dobře stavět.</code>
+    vašeho budoucího API, na kterém se vám bude dobře stavět.</q>
   </p>
   <p><a href="https://www.miroslavholec.cz"> 👉 <strong>Více o mně najdete na miroslavholec.cz</strong></a></p>
 </div>
