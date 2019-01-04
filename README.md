@@ -6,7 +6,9 @@
 
 Repositář obsahuje zdrojové kódy solution, kterou je možné použít jako výchozí šablonu pro vývoj RESTového Web API postaveného na technologii ASP.NET Core.
 
-🏢🏢🏢🏢🏢🏢🏢🏢🏢🏢
+<p>&nbsp;</p>
+
+📄📄📄📄📄📄📄📄📄📄📄
 <div>
   <h2><a href="https://www.miroslavholec.cz">Webové API na zakázku</a></h2>
   <p>
@@ -17,7 +19,7 @@ Repositář obsahuje zdrojové kódy solution, kterou je možné použít jako v
   <p><a href="https://www.miroslavholec.cz"> 👉 <strong>Více o mně najdete na miroslavholec.cz</strong></a></p>
 </div>
 
-🏢🏢🏢🏢🏢🏢🏢🏢🏢🏢🏢
+📄📄📄📄📄📄📄📄📄📄📄
 
 <p>&nbsp;</p>
 
