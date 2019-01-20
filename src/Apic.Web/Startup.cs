@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Apic.DependencyInjection;
 using Apic.Web.Extensions;
 using Apic.Web.Middlewares;
@@ -26,7 +26,8 @@ namespace Apic.Web
 
 		public IServiceProvider ConfigureServices(IServiceCollection services)
 		{
-		    services.AddApplicationInsightsTelemetry(configuration);
+		    services.AddCustomizedAutomapper();
+            services.AddApplicationInsightsTelemetry(configuration);
 			services.AddBeatPulseUI();
 			services.AddCustomizedBeatPulseHealthCheck(configuration);
 		    services.AddResponseCaching();

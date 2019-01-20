@@ -6,7 +6,7 @@ using Apic.Facades.Customers;
 using Apic.Web.Areas._Base;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Apic.Web.ActionFilters;
+using Apic.Web.Filters;
 
 namespace Apic.Web.Areas.Customers
 {
