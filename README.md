@@ -1,3 +1,6 @@
+[![Build status](https://mholec.visualstudio.com/DEV/_apis/build/status/Websites%20-%20HTML/RestApiCz)](https://mholec.visualstudio.com/DEV/_build/latest?definitionId=52)
+[![Build status](https://mholec.visualstudio.com/DEV/_apis/build/status/RestApiCz%20-%20Apic)](https://mholec.visualstudio.com/DEV/_build/latest?definitionId=0)
+
 # ASP.NET Core RESTful Web Api
 
 Repositář obsahuje zdrojové kódy solution, kterou je možné použít jako výchozí šablonu pro vývoj RESTového Web API postaveného na technologii ASP.NET Core.
@@ -10,10 +13,7 @@ Repositář obsahuje zdrojové kódy solution, kterou je možné použít jako v
 ## Status
 
 - **doc** - draft, neobsahuje nyní relevantní informace, testuje se workflow
-[![Build status](https://mholec.visualstudio.com/DEV/_apis/build/status/Websites%20-%20HTML/RestApiCz)](https://mholec.visualstudio.com/DEV/_build/latest?definitionId=52)
-
 - **src** - proof of concept
-[![Build status](https://mholec.visualstudio.com/DEV/_apis/build/status/RestApiCz%20-%20Apic)](https://mholec.visualstudio.com/DEV/_build/latest?definitionId=0)
 
 Současný stav projektu je ve fázi prototypu.
 
