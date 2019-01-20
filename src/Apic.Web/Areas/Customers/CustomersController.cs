@@ -7,6 +7,7 @@ using Apic.Web.Areas._Base;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Apic.Web.Filters;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Apic.Web.Areas.Customers
 {
@@ -43,7 +44,7 @@ namespace Apic.Web.Areas.Customers
 			return Ok(result);
 		}
 
-		[Route("customers/{id}")]
+		[Route("customers/{id:int}")]
 		[HttpPut]
 		[ProducesResponseType(typeof(Result<Customer>), (int)HttpStatusCode.OK)]
 		public async Task<IActionResult> Put(int id, [FromBody]CustomerUpdate model)
@@ -62,5 +63,15 @@ namespace Apic.Web.Areas.Customers
 
 			return CreatedAtAction(nameof(Get), new {id = result.Id}, result);
 		}
-	}
+
+	    [Route("customers/{id:int}")]
+	    [HttpDelete]
+	    [ProducesResponseType(typeof(Result<Customer>), (int)HttpStatusCode.NoContent)]
+	    public async Task<IActionResult> Delete(int id)
+	    {
+	        var result = await customerFacade.Delete(id);
+
+	        return NoContent();
+	    }
+    }
 }
