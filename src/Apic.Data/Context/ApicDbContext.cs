@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Apic.Data.Configurations.Customers;
 using Apic.Data.Configurations.Documents;
 using Apic.Data.Configurations.Orders;
-using Apic.Data.Infrastructure;
 using Apic.Entities.Customers;
 using Apic.Entities.Documents;
 using Microsoft.EntityFrameworkCore;
 
 namespace Apic.Data.Context
 {
-	public class ApicDbContext : DbContext
+    public class ApicDbContext : DbContext
 	{
 		public ApicDbContext(DbContextOptions<ApicDbContext> options) : base(options)
 		{

@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Apic.Common.Attributes;
@@ -18,7 +18,7 @@ namespace Apic.Services.AzureStorage
 			this.appSettings = appSettings.Value;
 		}
 
-		public async Task<string> GetBlobUrl(string containerName, string blobName)
+		public string GetBlobUrl(string containerName, string blobName)
 		{
 			var container = Client.GetContainerReference(containerName);
 			var blob = container.GetBlockBlobReference(blobName);

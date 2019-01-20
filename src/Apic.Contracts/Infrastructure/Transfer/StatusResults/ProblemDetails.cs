@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net;
 
 namespace Apic.Contracts.Infrastructure.Transfer.StatusResults
@@ -34,7 +34,7 @@ namespace Apic.Contracts.Infrastructure.Transfer.StatusResults
 				Type = typeof(ProblemDetails).Name,
 				Status = (int)HttpStatusCode.InternalServerError,
 				Detail = ex.Message
-			};
+            };
 
 			if (includeDetails)
 			{

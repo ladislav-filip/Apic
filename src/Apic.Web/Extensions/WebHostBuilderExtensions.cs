@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 
 namespace Apic.Web.Extensions
@@ -29,16 +29,6 @@ namespace Apic.Web.Extensions
 
 			return webHost;
 		}
-
-		public static IWebHost CustomizeDatabaseMigration(this IWebHost webHost)
-		{
-			//using (IServiceScope scope = webHost.Services.CreateScope())
-			//{
-			//	ApicDbContext dbContext = scope.ServiceProvider.GetService<ApicDbContext>();
-			//	dbContext.Database.Migrate();
-			//}
-
-			return webHost;
-		}
+        
 	}
 }

@@ -1,8 +1,11 @@
-﻿using System;
+using System;
 using Apic.Common.Configuration;
 using Apic.Data.Context;
+using Apic.Facades.Mappers;
+using Apic.Services.AzureStorage;
 using Apic.Web.ActionFilters;
 using Apic.Web.Cors;
+using AutoMapper;
 using BeatPulse;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
@@ -28,7 +31,20 @@ namespace Apic.Web.Extensions
 			return services;
 		}
 
-		public static IServiceCollection AddCustomizedBeatPulseHealthCheck(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddCustomizedAutomapper(this IServiceCollection services)
+        {
+            var mappingConfig = new MapperConfiguration(configuration =>
+            {
+                configuration.AddProfiles(typeof(CustomerMappingProfile).Assembly);
+            });
+
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
+            return services;
+        }
+
+        public static IServiceCollection AddCustomizedBeatPulseHealthCheck(this IServiceCollection services, IConfiguration configuration)
 		{
 			string sqlConnectionString = configuration.GetConnectionString("Default");
 
@@ -78,7 +94,9 @@ namespace Apic.Web.Extensions
 				options.FormatterMappings.SetMediaTypeMappingForFormat("js", MediaTypeHeaderValue.Parse("application/json"));
 				options.FormatterMappings.SetMediaTypeMappingForFormat("json", MediaTypeHeaderValue.Parse("application/json"));
 
-				options.Filters.Add(new ModelStateValidationActionFilter());
+                options.Filters.Add(new ExceptionFilterFactory());
+				options.Filters.Add(new ValidationFilterFactory());
+                options.Filters.Add(new ApiResultFilterFactory());
 			});
 
 			services.Configure<FormOptions>(options =>
@@ -86,20 +104,20 @@ namespace Apic.Web.Extensions
 				options.MultipartBodyLengthLimit = 1_048_576; // 1 MB
 			});
 
-			mvc.AddXmlSerializerFormatters();
-
 			mvc.SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
 			mvc.ConfigureApiBehaviorOptions(options =>
 			{
-				options.SuppressModelStateInvalidFilter = false;
-				options.SuppressConsumesConstraintForFormFileParameters = false;
-				options.SuppressInferBindingSourcesForParameters = false;
-				options.SuppressMapClientErrors = false;
-				options.SuppressUseValidationProblemDetailsForInvalidModelStateResponses = false;
+				options.SuppressModelStateInvalidFilter = true;
+				options.SuppressConsumesConstraintForFormFileParameters = true;
+				options.SuppressInferBindingSourcesForParameters = true;
+				options.SuppressMapClientErrors = true;
+				options.SuppressUseValidationProblemDetailsForInvalidModelStateResponses = true;
 			});
 
-			mvc.AddJsonOptions(jsonOptions =>
+            mvc.AddXmlSerializerFormatters();
+
+            mvc.AddJsonOptions(jsonOptions =>
 			{
 				if (jsonOptions.SerializerSettings.ContractResolver != null)
 				{

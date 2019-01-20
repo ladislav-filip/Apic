@@ -6,10 +6,11 @@ using Apic.Facades.Customers;
 using Apic.Web.Areas._Base;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Apic.Web.ActionFilters;
 
 namespace Apic.Web.Areas.Customers
 {
-	[Area("customers")]
+    [Area("customers")]
 	public class CustomersController :  ApiControllerBase
 	{
 		private readonly ICustomerFacade customerFacade;
@@ -23,58 +24,43 @@ namespace Apic.Web.Areas.Customers
 
 		[Route("customers")]
 		[HttpGet]
-		[ProducesResponseType(typeof(DataListResult<Customer>), (int)HttpStatusCode.OK)]
+		[ProducesResponseType(typeof(Result<Collection<Customer>>), (int)HttpStatusCode.OK)]
+        [IgnoreModelStateOnBinding]
 		public async Task<IActionResult> Get([FromQuery]CustomerFilter filter)
 		{
-			DataListResult<Customer> result = await customerFacade.Get(filter);
-			UpdateModelState(result);
+			Collection<Customer> result = await customerFacade.Get(filter);
 
-			return ErrorResult(result) ??
-			       Ok(result);
+			return Ok(result);
 		}
 
 		[Route("customers/{id:int}")]
 		[HttpGet]
-		[ProducesResponseType(typeof(DataResult<Customer>), (int)HttpStatusCode.OK)]
+		[ProducesResponseType(typeof(Result<Customer>), (int)HttpStatusCode.OK)]
 		public async Task<IActionResult> Get(int id)
 		{
-			DataResult<Customer> result = await customerFacade.Get(id);
-			UpdateModelState(result);
+            Customer result = await customerFacade.Get(id);
 
-			return ErrorResult(result) ?? 
-			       Ok(result);
+			return Ok(result);
 		}
 
 		[Route("customers/{id}")]
 		[HttpPut]
-		[ProducesResponseType(typeof(DataResult<Customer>), (int)HttpStatusCode.OK)]
+		[ProducesResponseType(typeof(Result<Customer>), (int)HttpStatusCode.OK)]
 		public async Task<IActionResult> Put(int id, [FromBody]CustomerUpdate model)
 		{
-			DataResult<Customer> result = await customerFacade.Update(id, model);
-			UpdateModelState(result);
+            Customer result = await customerFacade.Update(id, model);
 
-			return ErrorResult(result) ??
-			       Ok(result);
+			return Ok(result);
 		}
 
 		[Route("customers")]
 		[HttpPost]
-		[ProducesResponseType(typeof(DataResult<Customer>), (int)HttpStatusCode.Created)]
+		[ProducesResponseType(typeof(Result<Customer>), (int)HttpStatusCode.Created)]
 		public async Task<IActionResult> Post([FromBody]CustomerCreate model)
 		{
-			DataResult<Customer> result = await customerFacade.Create(model);
-			UpdateModelState(result);
+            Customer result = await customerFacade.Create(model);
 
-			return ErrorResult(result) ??
-			       CreatedAtAction(nameof(Get), new {id = result.Data.Id}, result);
-		}
-
-		[Route("customers/{id}")]
-		[HttpDelete]
-		[ProducesResponseType(typeof(DataResult<Customer>), (int)HttpStatusCode.NoContent)]
-		public async Task<IActionResult> Delete(int id)
-		{
-			return await ReturnResult(() => customerFacade.Delete(id), NoContent());
+			return CreatedAtAction(nameof(Get), new {id = result.Id}, result);
 		}
 	}
 }

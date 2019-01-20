@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using Apic.Common.Attributes;
 using Apic.Facades.Customers;
 using Apic.Facades.Customers.Queries;
 using Apic.Facades.Mappers;
+using Apic.Services;
 using Apic.Services.AzureStorage;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
@@ -29,11 +30,10 @@ namespace Apic.DependencyInjection
 				.ImplementedBy<AzureStorageService>()
 				.LifestyleCustom<MsScopedLifestyleManager>());
 
-			// queries
-			container.Register(
-				Component.For<GetCustomersQuery>()
-				.ImplementedBy<GetCustomersQuery>()
-				.LifestyleCustom<MsScopedLifestyleManager>());
+            container.Register(
+                Component.For<ModelStateAccessor>()
+                .ImplementedBy<ModelStateAccessor>()
+                .LifestyleCustom<MsScopedLifestyleManager>());
 
 			return container;
 		}

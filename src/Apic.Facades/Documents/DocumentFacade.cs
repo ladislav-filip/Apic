@@ -1,25 +1,23 @@
-﻿using System;
-using System.Linq;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Apic.Common.Attributes;
+using Apic.Common.Exceptions;
 using Apic.Contracts.Documents;
-using Apic.Contracts.Infrastructure.Transfer;
 using Apic.Data.Context;
-using Apic.Facades.Mappers;
 using Apic.Services.AzureStorage;
 using Apic.Services.Documents;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using CustomerDto = Apic.Entities.Customers.Customer;
-using DocumentDto = Apic.Entities.Documents.Document;
+using DocumentDbo = Apic.Entities.Documents.Document;
 
 
 namespace Apic.Facades.Documents
 {
-	public interface IDocumentFacade
+    public interface IDocumentFacade
 	{
-		Task<DataResult<Document>> Get(Guid id);
-		Task<DataResult<Document>> UploadDocument(int customerId, DocumentCreate createRequest, CancellationToken cancellationToken);
+		Task<Document> Get(Guid id);
+		Task<Document> UploadDocument(int customerId, DocumentCreate createRequest, CancellationToken cancellationToken);
 	}
 
 	[ScopedService]
@@ -27,46 +25,46 @@ namespace Apic.Facades.Documents
 	{
 		private readonly ApicDbContext dbContext;
 		private readonly AzureStorageService azureStorageService;
-		private readonly IDocumentMapper documentMapper;
+		private readonly IMapper mapper;
  
-		public DocumentFacade(ApicDbContext dbContext, AzureStorageService azureStorageService, IDocumentMapper documentMapper)
+		public DocumentFacade(ApicDbContext dbContext, AzureStorageService azureStorageService, IMapper mapper)
 		{
 			this.dbContext = dbContext;
 			this.azureStorageService = azureStorageService;
-			this.documentMapper = documentMapper;
+			this.mapper = mapper;
 		}
 
-		public async Task<DataResult<Document>> Get(Guid id)
+		public async Task<Document> Get(Guid id)
 		{
-			DocumentDto document = await dbContext.Documents.FirstOrDefaultAsync(x => x.Id == id);
+			DocumentDbo document = await dbContext.Documents.FirstOrDefaultAsync(x => x.Id == id);
 			if (document == null)
 			{
-				return DataResult<Document>.NotFound("Dokument nebyl nalezen");
+                throw new ObjectNotFoundException("Dokument nebyl nalezen");
 			}
 
-			var doc = (await documentMapper.Map(dbContext.Documents.Where(x => x.Id == id))).FirstOrDefault();
+            Document doc = mapper.Map<Document>(document);
 
-			return DataResult<Document>.Ok(doc);
+			return doc;
 		}
 
-		public async Task<DataResult<Document>> UploadDocument(int customerId, DocumentCreate createRequest, CancellationToken cancellationToken)
+		public async Task<Document> UploadDocument(int customerId, DocumentCreate createRequest, CancellationToken cancellationToken)
 		{
 			bool existsCustomer = await dbContext.Customers.AnyAsync(x => x.Id == customerId, cancellationToken);
 			if (!existsCustomer)
 			{
-				return DataResult<Document>.NotFound("Customer nebyl nalezen!");
+                throw new ObjectNotFoundException("Customer nebyl nalezen!");
 			}
 
 			string containerName = ContainerPaths.CustomerDocuments(customerId);
 
-			DocumentDto document = documentMapper.Map(customerId, createRequest);
+			DocumentDbo document = mapper.Map<DocumentDbo>(createRequest, x=> x.Items.Add("customerId", customerId));
 
 			await azureStorageService.UploadAsync(createRequest.Datastream, containerName, document.Id.ToString(), cancellationToken);
 
 			dbContext.Documents.Add(document);
 			await dbContext.SaveChangesAsync(cancellationToken);
 
-			return DataResult<Document>.Ok(await documentMapper.Map(document));
+			return mapper.Map<Document>(document);
 		}
 	}
 }

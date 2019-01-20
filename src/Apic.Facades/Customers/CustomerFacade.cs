@@ -1,13 +1,16 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Apic.Common.Attributes;
+using Apic.Common.Exceptions;
 using Apic.Contracts.Customers;
 using Apic.Contracts.Infrastructure.Transfer;
 using Apic.Data.Context;
 using Apic.Facades.Customers.Queries;
-using Apic.Facades.Infrastructure.Extensions;
 using Apic.Facades.Mappers;
+using Apic.Services;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using CustomerDbo = Apic.Entities.Customers.Customer;
 
@@ -15,80 +18,81 @@ namespace Apic.Facades.Customers
 {
 	public interface ICustomerFacade
 	{
-		Task<DataListResult<Customer>> Get(CustomerFilter customerFilter);
-		Task<DataResult<Customer>> Get(int customerId);
-		Task<DataResult<Customer>> Create(CustomerCreate createRequest);
-		Task<DataResult<Customer>> Update(int id, CustomerUpdate model);
-		Task<Result> Delete(int customerId);
+		Task<Collection<Customer>> Get(CustomerFilter customerFilter);
+		Task<Customer> Get(int customerId);
+		Task<Customer> Create(CustomerCreate createRequest);
+		Task<Customer> Update(int id, CustomerUpdate model);
+		Task<bool> Delete(int customerId);
 	}
 
 	[ScopedService]
 	public class CustomerFacade : ICustomerFacade
 	{
 		private readonly ApicDbContext dbContext;
-		private readonly ICustomerMapper customerMapper;
+		private readonly IMapper mapper;
+        private readonly ModelStateAccessor requestState;
 
-		public CustomerFacade(ApicDbContext dbContext, ICustomerMapper customerMapper)
+		public CustomerFacade(ApicDbContext dbContext, IMapper mapper, ModelStateAccessor requestState)
 		{
 			this.dbContext = dbContext;
-			this.customerMapper = customerMapper;
+			this.mapper = mapper;
+            this.requestState = requestState;
 		}
 
-		public async Task<DataListResult<Customer>> Get(CustomerFilter customerFilter)
+		public async Task<Collection<Customer>> Get(CustomerFilter customerFilter)
 		{
-			IQueryable<CustomerDbo> query = dbContext.Customers.ExecuteQuery(new GetCustomersQuery(customerFilter));
-			List<Customer> result = await customerMapper.Map(query.ApplyPaging(customerFilter));
-			return DataListResult<Customer>.Ok(result, customerFilter, query.Count());
+            GetCustomerQuery query = new GetCustomerQuery(dbContext, customerFilter);
+            List<Customer> items = await mapper.ProjectTo<Customer>(query.Query()).ToListAsync();
+            return new Collection<Customer>(items, query.Count(), customerFilter);
+        }
 
-		}
-
-		public async Task<DataResult<Customer>> Get(int customerId)
+        public async Task<Customer> Get(int customerId)
 		{
 			CustomerDbo customer = await dbContext.Customers.FirstOrDefaultAsync(x => x.Id == customerId);
-			if (customer == null)
-			{
-				return DataResult<Customer>.NotFound();
-			}
+            if (customer == null)
+            {
+                throw new ObjectNotFoundException("Zákazník nebyl nalezen!");
+            }
 
-			Customer customerResult = customerMapper.Map(customer);
-			return DataResult<Customer>.Ok(customerResult);
+            Customer customerResult = mapper.Map<Customer>(customer);
+			return customerResult;
 		}
 
-		public async Task<DataResult<Customer>> Create(CustomerCreate createRequest)
+		public async Task<Customer> Create(CustomerCreate createRequest)
 		{
-			CustomerDbo customer = customerMapper.Map(createRequest);
+			CustomerDbo customer = mapper.Map<CustomerDbo>(createRequest);
 
 			dbContext.Customers.Add(customer);
 			await dbContext.SaveChangesAsync();
 
-			Customer result = customerMapper.Map(customer);
+			Customer result = mapper.Map<Customer>(customer);
 
-			return DataResult<Customer>.Ok(result);
+			return result;
 		}
 
-		public async Task<DataResult<Customer>> Update(int id, CustomerUpdate model)
+		public async Task<Customer> Update(int id, CustomerUpdate model)
 		{
 			CustomerDbo customer = await dbContext.Customers.FirstOrDefaultAsync(x => x.Id == id);
-			customer = customerMapper.Map(model, customer);
+			customer = mapper.Map(model, customer);
 
 			await dbContext.SaveChangesAsync();
-			Customer result = customerMapper.Map(customer);
+			Customer result = mapper.Map<Customer>(customer);
 
-			return DataResult<Customer>.Ok(result);
+			return result;
 		}
 
-		public async Task<Result> Delete(int customerId)
+		public async Task<bool> Delete(int customerId)
 		{
 			bool existsCustomer = await dbContext.Customers.AnyAsync(x => x.Id == customerId);
 			if (!existsCustomer)
 			{
-				return Result.NotFound();
+                throw new ObjectNotFoundException("Zákazník nebyl nalezen");
 			}
 
-			dbContext.Customers.Remove(new CustomerDbo{Id = customerId});
+            dbContext.Customers.Remove(new CustomerDbo { Id = customerId });
 			await dbContext.SaveChangesAsync();
 
-			return Result.Ok();
+            return true;
 		}
 	}
 }

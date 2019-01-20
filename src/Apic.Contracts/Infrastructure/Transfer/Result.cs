@@ -1,45 +1,58 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace Apic.Contracts.Infrastructure.Transfer
 {
-	public class Result : IResult
+	public class Result<T>
 	{
-		public Result()
-		{
-			Messages = new List<ResultMessage>();
-		}
+		public T Data { get; set; }
+        public List<string> Messages { get; set; }
 
-		public ResultCodes Code { get; set; } = ResultCodes.Ok;
-		public List<ResultMessage> Messages { get; set; }
+  //      public static DataResult<T> Ok(T data)
+		//{
+		//	return new DataResult<T>()
+		//	{
+		//		Data = data,
+		//		Code = ResultCodes.Ok
+		//	};
+		//}
 
-		public static Result Ok()
-		{
-			return new Result();
-		}
+		//public new static DataResult<T> ClientBadRequest(string message)
+		//{
+		//	var result =  new DataResult<T>()
+		//	{
+		//		Code = ResultCodes.BadRequest
+		//	};
 
-		public static Result ClientBadRequest(string message)
-		{
-			return new Result()
-			{
-				Code = ResultCodes.BadRequest
+		//	result.AddMessage(message);
 
-			};
-		}
+		//	return result;
+		//}
 
-		public static Result Error(string message)
-		{
-			return new Result()
-			{
-				Code = ResultCodes.Error
-			};
-		}
+		//public new static DataResult<T> Error(string message)
+		//{
+		//	var result = new DataResult<T>()
+		//	{
+		//		Code = ResultCodes.Error
+		//	};
 
-		public static Result NotFound()
-		{
-			return new Result()
-			{
-				Code = ResultCodes.NotFound
-			};
-		}
+		//	result.AddMessage(message);
+
+		//	return result;
+		//}
+
+		//public static DataResult<T> NotFound(string message = null)
+		//{
+		//	var result = new DataResult<T>()
+		//	{
+		//		Code = ResultCodes.NotFound
+		//	};
+
+		//	if (!string.IsNullOrEmpty(message))
+		//	{
+		//		result.AddMessage(message);
+		//	}
+
+		//	return result;
+		//}
 	}
 }
