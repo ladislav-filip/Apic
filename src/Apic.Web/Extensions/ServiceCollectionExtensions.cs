@@ -80,6 +80,7 @@ namespace Apic.Web.Extensions
 			IConfiguration configuration)
 		{
 			services.Configure<AppSettings>(configuration);
+			services.Configure<Throttling>(configuration.GetSection("Throttling"));
 
 			return services;
 		}

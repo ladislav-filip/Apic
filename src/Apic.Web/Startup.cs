@@ -49,6 +49,7 @@ namespace Apic.Web
 	        app.UseBeatPulseUI();
 	        app.UseResponseCaching();
 	        app.UseCustomizedExceptionHandling();
+            app.UseThrottlingMiddleware();
 	        app.UseCustomizedSwagger();
 	        app.UseCustomizedCors();
 			app.UseMvc();

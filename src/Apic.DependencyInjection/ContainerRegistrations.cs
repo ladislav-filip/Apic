@@ -5,6 +5,7 @@ using Apic.Facades.Customers.Queries;
 using Apic.Facades.Mappers;
 using Apic.Services;
 using Apic.Services.AzureStorage;
+using Apic.Services.Throttling;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using Castle.Windsor.MsDependencyInjection;
@@ -35,7 +36,12 @@ namespace Apic.DependencyInjection
                 .ImplementedBy<ModelStateAccessor>()
                 .LifestyleCustom<MsScopedLifestyleManager>());
 
-			return container;
+		    container.Register(
+		        Component.For<ThrottlingDemoService>()
+		            .ImplementedBy<ThrottlingDemoService>()
+		            .LifestyleSingleton());
+
+            return container;
 		}
 	}
 }
