@@ -21,13 +21,13 @@ namespace Apic.Web.Areas.Documents
 		}
 
 		[Route("documents/{id}")]
-		[HttpGet]
-		[ProducesResponseType(typeof(Result<Document>), (int)HttpStatusCode.Created)]
+		[HttpGet, HttpHead]
+        [ProducesResponseType(typeof(Result<Document>), (int)HttpStatusCode.Created)]
 		public async Task<IActionResult> Get(Guid id)
 		{
             Document result = await documentFacade.Get(id);
 
 			return Ok(result);
 		}
-	}
+    }
 }

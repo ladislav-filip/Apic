@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
@@ -58,9 +59,10 @@ namespace Apic.Facades.Infrastructure
             Dictionary<string, string> mappedRules = new Dictionary<string, string>();
             foreach (var orderRule in Filter.OrderByRules())
             {
-                if (PropertiesMap.ContainsKey(orderRule.Key))
+                string contractProperty = PropertiesMap.FirstOrDefault(x => x.Key.Equals(orderRule.Key, StringComparison.InvariantCultureIgnoreCase)).Value;
+                if (contractProperty.IsNotNullOrEmpty())
                 {
-                    mappedRules.Add(PropertiesMap[orderRule.Key], orderRule.Value);
+                    mappedRules.Add(contractProperty, orderRule.Value);
                 }
             }
 

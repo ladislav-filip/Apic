@@ -21,8 +21,8 @@ namespace Apic.Web.Areas.Customers
 		}
 
 		[Route("customers")]
-		[HttpGet]
-		[ProducesResponseType(typeof(Result<Collection<Customer>>), (int)HttpStatusCode.OK)]
+		[HttpGet, HttpHead]
+        [ProducesResponseType(typeof(Result<Collection<Customer>>), (int)HttpStatusCode.OK)]
         [IgnoreModelStateOnBinding]
 		public async Task<IActionResult> Get([FromQuery]CustomerFilter filter)
 		{
@@ -32,8 +32,8 @@ namespace Apic.Web.Areas.Customers
 		}
 
 		[Route("customers/{id:int}")]
-		[HttpGet]
-		[ProducesResponseType(typeof(Result<Customer>), (int)HttpStatusCode.OK)]
+		[HttpGet, HttpHead]
+        [ProducesResponseType(typeof(Result<Customer>), (int)HttpStatusCode.OK)]
 		public async Task<IActionResult> Get(int id)
 		{
             Customer result = await customerFacade.Get(id);

@@ -26,6 +26,7 @@ namespace Apic.Web
 
 		public IServiceProvider ConfigureServices(IServiceCollection services)
 		{
+		    services.AddCors();
 		    services.AddCustomizedOptions(configuration);
             services.AddCustomizedAzureStorage();
             services.AddCustomizedAutomapper();
@@ -50,6 +51,7 @@ namespace Apic.Web
         {
 	        loggerFactory.AddApplicationInsights(app.ApplicationServices);
 
+            app.UseCors();
 	        app.UseBeatPulseUI();
 	        app.UseResponseCaching();
 	        app.UseCustomizedExceptionHandling();

@@ -18,8 +18,8 @@ namespace Apic.Facades.Customers.Queries
 
         protected override Dictionary<string, string> PropertiesMap => new Dictionary<string, string>()
         {
-            { "Id", "Id" },
-            { "Email", "Email" },
+            { nameof(Customer.Id), nameof(CustomerDbo.Id) },
+            { nameof(Customer.Email), nameof(CustomerDbo.Email) }
         };
 
         protected override IQueryable<CustomerDbo> Query()
