@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Apic.Contracts.Customers;
@@ -7,7 +6,6 @@ using Apic.Facades.Customers;
 using Apic.Services;
 using Apic.Web.Areas._Base;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Apic.Web.Filters;
 
 namespace Apic.Web.Areas.Customers
@@ -16,12 +14,10 @@ namespace Apic.Web.Areas.Customers
 	public class CustomersController :  ApiControllerBase
 	{
 		private readonly ICustomerFacade customerFacade;
-		private readonly ILogger logger;
 
-		public CustomersController(ICustomerFacade customerFacade, ILogger<CustomersController> logger, ModelStateAccessor modelStateAccessor) : base(modelStateAccessor)
+		public CustomersController(ICustomerFacade customerFacade, ModelStateAccessor modelStateAccessor) : base(modelStateAccessor)
 		{
 			this.customerFacade = customerFacade;
-			this.logger = logger;
 		}
 
 		[Route("customers")]

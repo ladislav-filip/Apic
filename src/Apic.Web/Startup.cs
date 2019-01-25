@@ -55,8 +55,9 @@ namespace Apic.Web
 	        app.UseCustomizedExceptionHandling();
             app.UseThrottlingMiddleware();
 	        app.UseCustomizedSwagger();
-	        app.UseCustomizedCors();
-			app.UseMvc();
+            app.UseCustomizedOptionsMethodMiddleware();
+            app.UseCustomizedCors();
+            app.UseMvc();
         }
     }
 }
