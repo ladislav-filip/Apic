@@ -3,11 +3,11 @@ using System.Threading.Tasks;
 using Apic.Contracts.Customers;
 using Apic.Contracts.Infrastructure.Transfer;
 using Apic.Facades.Customers;
+using Apic.Services;
 using Apic.Web.Areas._Base;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Apic.Web.Filters;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Apic.Web.Areas.Customers
 {
@@ -17,7 +17,7 @@ namespace Apic.Web.Areas.Customers
 		private readonly ICustomerFacade customerFacade;
 		private readonly ILogger logger;
 
-		public CustomersController(ICustomerFacade customerFacade, ILogger<CustomersController> logger)
+		public CustomersController(ICustomerFacade customerFacade, ILogger<CustomersController> logger, ModelStateAccessor modelStateAccessor) : base(modelStateAccessor)
 		{
 			this.customerFacade = customerFacade;
 			this.logger = logger;
@@ -69,7 +69,7 @@ namespace Apic.Web.Areas.Customers
 	    [ProducesResponseType(typeof(Result<Customer>), (int)HttpStatusCode.NoContent)]
 	    public async Task<IActionResult> Delete(int id)
 	    {
-	        var result = await customerFacade.Delete(id);
+	        await customerFacade.Delete(id);
 
 	        return NoContent();
 	    }

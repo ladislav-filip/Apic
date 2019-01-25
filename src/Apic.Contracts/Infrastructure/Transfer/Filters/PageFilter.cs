@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Apic.Contracts.Infrastructure.Transfer.Filters
 {
-	public class PageFilter : IValidatableObject
+	public class PageFilter : BaseFilter, IValidatableObject
 	{
 		protected int MaxPageSize = 100;
 

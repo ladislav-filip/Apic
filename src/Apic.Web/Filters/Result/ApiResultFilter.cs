@@ -1,5 +1,3 @@
-using System.Linq;
-using Apic.Contracts.Infrastructure.Transfer;
 using Apic.Services;
 using Apic.Web.Extensions;
 using Microsoft.AspNetCore.Mvc;
@@ -27,18 +25,6 @@ namespace Apic.Web.Filters.Result
                 var message = StatusResults.ValidationProblemDetails.FromErrors(context.ModelState.ToValidationErrorMessages());
                 context.Result = new BadRequestObjectResult(message);
                 return;
-            }
-
-            //CreatedResult createdResult = context.Result as CreatedResult;
-            //NoContentResult noResult = context.Result as NoContentResult;
-            OkObjectResult okResult = context.Result as OkObjectResult;
-            if (okResult != null)
-            {
-                okResult.Value = new Result<object>
-                {
-                    Messages = modelStateAccessor.Messages.ToList(),
-                    Data = okResult.Value
-                };
             }
 
             base.OnResultExecuting(context);

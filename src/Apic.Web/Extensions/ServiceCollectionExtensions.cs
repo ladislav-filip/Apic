@@ -1,8 +1,6 @@
-using System;
 using Apic.Common.Configuration;
 using Apic.Data.Context;
 using Apic.Facades.Mappers;
-using Apic.Services.AzureStorage;
 using Apic.Web.Cors;
 using Apic.Web.Filters.Action;
 using Apic.Web.Filters.Exception;
@@ -11,6 +9,7 @@ using AutoMapper;
 using BeatPulse;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -100,7 +99,7 @@ namespace Apic.Web.Extensions
                 options.Filters.Add(new ExceptionFilterFactory());
 				options.Filters.Add(new ValidationFilterFactory());
                 options.Filters.Add(new ApiResultFilterFactory());
-			});
+            });
 
 			services.Configure<FormOptions>(options =>
 			{
@@ -118,7 +117,7 @@ namespace Apic.Web.Extensions
 				options.SuppressUseValidationProblemDetailsForInvalidModelStateResponses = true;
 			});
 
-            mvc.AddXmlSerializerFormatters();
+		    mvc.AddXmlSerializerFormatters();
 
             mvc.AddJsonOptions(jsonOptions =>
 			{

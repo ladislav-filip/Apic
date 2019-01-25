@@ -12,6 +12,7 @@ using Apic.Services;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using CustomerDbo = Apic.Entities.Customers.Customer;
 
 namespace Apic.Facades.Customers
@@ -22,7 +23,7 @@ namespace Apic.Facades.Customers
 		Task<Customer> Get(int customerId);
 		Task<Customer> Create(CustomerCreate createRequest);
 		Task<Customer> Update(int id, CustomerUpdate model);
-		Task<bool> Delete(int customerId);
+		Task Delete(int customerId);
 	}
 
 	[ScopedService]
@@ -41,7 +42,7 @@ namespace Apic.Facades.Customers
 
 		public async Task<Collection<Customer>> Get(CustomerFilter customerFilter)
 		{
-            GetCustomerQuery query = new GetCustomerQuery(dbContext, customerFilter);
+            GetCustomersQuery query = new GetCustomersQuery(dbContext, customerFilter);
             List<Customer> items = await mapper.ProjectTo<Customer>(query.Query()).ToListAsync();
             return new Collection<Customer>(items, query.Count(), customerFilter);
         }
@@ -51,7 +52,7 @@ namespace Apic.Facades.Customers
 			CustomerDbo customer = await dbContext.Customers.FirstOrDefaultAsync(x => x.Id == customerId);
             if (customer == null)
             {
-                throw new ObjectNotFoundException("Zákazník nebyl nalezen!");
+                throw new ObjectNotFoundException("Customer was not found!");
             }
 
             Customer customerResult = mapper.Map<Customer>(customer);
@@ -81,18 +82,16 @@ namespace Apic.Facades.Customers
 			return result;
 		}
 
-		public async Task<bool> Delete(int customerId)
+		public async Task Delete(int customerId)
 		{
 			bool existsCustomer = await dbContext.Customers.AnyAsync(x => x.Id == customerId);
 			if (!existsCustomer)
 			{
-                throw new ObjectNotFoundException("Zákazník nebyl nalezen");
+                throw new ObjectNotFoundException("Customer was not found");
 			}
 
             dbContext.Customers.Remove(new CustomerDbo { Id = customerId });
 			await dbContext.SaveChangesAsync();
-
-            return true;
 		}
 	}
 }

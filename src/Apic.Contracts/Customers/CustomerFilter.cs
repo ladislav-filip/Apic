@@ -1,5 +1,4 @@
 using Apic.Contracts.Infrastructure.Transfer.Filters;
-using System.ComponentModel.DataAnnotations;
 
 namespace Apic.Contracts.Customers
 {
@@ -10,7 +9,8 @@ namespace Apic.Contracts.Customers
 			MaxPageSize = 100;
 		}
 
-        public string LastName { get; set; }
+	    public override string OrderBy { get; set; } = "Id";
+	    public string LastName { get; set; }
         public string Domain { get; set; }
 	}
 }

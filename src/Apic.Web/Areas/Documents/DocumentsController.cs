@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Apic.Contracts.Documents;
 using Apic.Contracts.Infrastructure.Transfer;
 using Apic.Facades.Documents;
+using Apic.Services;
 using Apic.Web.Areas._Base;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,7 +15,7 @@ namespace Apic.Web.Areas.Documents
 	{
 		private readonly IDocumentFacade documentFacade;
 
-		public CustomerDocumentsController(IDocumentFacade documentFacade)
+		public CustomerDocumentsController(IDocumentFacade documentFacade, ModelStateAccessor modelStateAccessor) : base(modelStateAccessor)
 		{
 			this.documentFacade = documentFacade;
 		}
