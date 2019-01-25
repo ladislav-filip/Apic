@@ -15,6 +15,11 @@ namespace Apic.Contracts.Infrastructure.Transfer.Filters
 
 		public virtual IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
 		{
+		    if (Page < 1)
+		    {
+		        Page = 1;
+		    }
+
 			if (PageSize > MaxPageSize)
 			{
 				PageSize = MaxPageSize;
