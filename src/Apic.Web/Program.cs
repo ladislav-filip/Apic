@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Apic.Data.Context;
 using Apic.Web.Extensions;
@@ -21,9 +22,17 @@ namespace Apic.Web
                 .UseStartup<Startup>()
                 .Build();
 
-            MigrateDatabase(host);
+            ProcessCommands(args, host);
 
             await host.RunAsync();
+        }
+
+        private static void ProcessCommands(string[] args, IWebHost host)
+        {
+            if (args.Contains("migratedb"))
+            {
+                MigrateDatabase(host);
+            }
         }
 
         private static void MigrateDatabase(IWebHost webhost)
