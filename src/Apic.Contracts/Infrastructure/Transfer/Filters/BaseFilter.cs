@@ -7,13 +7,13 @@ namespace Apic.Contracts.Infrastructure.Transfer.Filters
     {
         public const string DefaultSortOrder = "asc";
 
-        public virtual string OrderBy { get; set; }
+        public virtual string Sort { get; set; }
         public string SearchQuery { get; set; }
 
         public Dictionary<string, string> OrderByRules()
         {
             Dictionary<string, string> rules = new Dictionary<string, string>();
-            string[] orderRules = OrderBy.Split(',');
+            string[] orderRules = Sort.Split(',');
 
             foreach (var orderRule in orderRules)
             {

@@ -8,7 +8,7 @@ using Apic.Data.Context;
 
 namespace Apic.Facades.Infrastructure
 {
-    public abstract class QueryBase<T, TS> : IQuery<T> where TS: PageFilter where T : class
+    public abstract class QueryBase<T, TS> : IQuery<T> where TS: BaseFilter where T : class
     {
         protected abstract Dictionary<string, string> PropertiesMap { get; }
 
@@ -23,7 +23,6 @@ namespace Apic.Facades.Infrastructure
 
         public virtual IQueryable<T> Build()
         {
-            // order by
             IQueryable<T> query = Query();
             string orderRules = GetMappedOrderByClause();
             if (orderRules.IsNotNullOrEmpty())
@@ -31,8 +30,11 @@ namespace Apic.Facades.Infrastructure
                 query = query.OrderBy(orderRules);
             }
 
-            // paging
-            query = query.Skip(Filter.PageSize * (Filter.Page - 1)).Take(Filter.PageSize);
+            PageFilter pageFilter = Filter as PageFilter;
+            if (pageFilter != null)
+            {
+                query = query.Skip(pageFilter.PageSize * (pageFilter.Page - 1)).Take(pageFilter.PageSize);
+            }
 
             return query;
         }
@@ -51,7 +53,7 @@ namespace Apic.Facades.Infrastructure
 
         private string GetMappedOrderByClause()
         {
-            if (Filter.OrderBy.IsNullOrEmpty())
+            if (Filter.Sort.IsNullOrEmpty())
             {
                 return string.Empty;
             }
