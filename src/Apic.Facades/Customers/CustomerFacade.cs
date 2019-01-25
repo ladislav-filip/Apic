@@ -43,7 +43,7 @@ namespace Apic.Facades.Customers
 		public async Task<Collection<Customer>> Get(CustomerFilter customerFilter)
 		{
             GetCustomersQuery query = new GetCustomersQuery(dbContext, customerFilter);
-            List<Customer> items = await mapper.ProjectTo<Customer>(query.Query()).ToListAsync();
+            List<Customer> items = await mapper.ProjectTo<Customer>(query.Build()).ToListAsync();
             return new Collection<Customer>(items, query.Count(), customerFilter);
         }
 
