@@ -24,10 +24,10 @@ namespace Apic.Facades.Documents
 	public class DocumentFacade : IDocumentFacade
 	{
 		private readonly ApicDbContext dbContext;
-		private readonly AzureStorageService azureStorageService;
+		private readonly IAzureStorageService azureStorageService;
 		private readonly IMapper mapper;
  
-		public DocumentFacade(ApicDbContext dbContext, AzureStorageService azureStorageService, IMapper mapper)
+		public DocumentFacade(ApicDbContext dbContext, IAzureStorageService azureStorageService, IMapper mapper)
 		{
 			this.dbContext = dbContext;
 			this.azureStorageService = azureStorageService;

@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Apic.Common.Configuration;
@@ -29,17 +27,21 @@ namespace Apic.Web.Middlewares
             if (IsApiRequest(httpContext.Request))
             {
                 IPAddress ipAddress = httpContext.Connection.RemoteIpAddress;
+                TimeSpan period = TimeSpan.FromMinutes(1);
 
                 throttlingDemoService.LogAccess(ipAddress);
 
-                if (throttlingDemoService.ThresholdExceeded(ipAddress, throttlingSettings.MaxRequestsPerMinute,
-                    TimeSpan.FromMinutes(1)))
+                if (throttlingDemoService.ThresholdExceeded(ipAddress, throttlingSettings.MaxRequestsPerMinute, period))
                 {
                     httpContext.Response.Clear();
                     httpContext.Response.StatusCode = (int)HttpStatusCode.Conflict;
-                    await httpContext.Response.WriteAsync("IP address requests limit exceeded");
+                    await httpContext.Response.WriteAsync("IP Address Limit Exceeded");
                     return;
                 }
+
+                int remainingCount = throttlingDemoService.RemainingLimit(ipAddress, throttlingSettings.MaxRequestsPerMinute, period);
+                httpContext.Response.Headers.Add("X-Rate-Limit-Remaining", remainingCount.ToString());
+                httpContext.Response.Headers.Add("X-Rate-Limit-Period", period.ToString());
             }
 
             await next(httpContext);

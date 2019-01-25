@@ -8,9 +8,9 @@ namespace Apic.Facades.Mappers.Resolvers
 {
     public class BlobUrlValueResolver : IValueResolver<DocumentDbo, Document, string>
     {
-        private readonly AzureStorageService azureStorageService;
+        private readonly IAzureStorageService azureStorageService;
 
-        public BlobUrlValueResolver(AzureStorageService azureStorageService)
+        public BlobUrlValueResolver(IAzureStorageService azureStorageService)
         {
             this.azureStorageService = azureStorageService;
         }

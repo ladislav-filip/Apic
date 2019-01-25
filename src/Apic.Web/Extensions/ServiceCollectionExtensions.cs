@@ -1,6 +1,7 @@
 using Apic.Common.Configuration;
 using Apic.Data.Context;
 using Apic.Facades.Mappers;
+using Apic.Services.AzureStorage;
 using Apic.Web.Cors;
 using Apic.Web.Filters.Action;
 using Apic.Web.Filters.Exception;
@@ -34,9 +35,12 @@ namespace Apic.Web.Extensions
 
         public static IServiceCollection AddCustomizedAutomapper(this IServiceCollection services)
         {
+            IAzureStorageService azureStorage = services.BuildServiceProvider().GetService<IAzureStorageService>();
+
             var mappingConfig = new MapperConfiguration(configuration =>
             {
-                configuration.AddProfiles(typeof(CustomerMappingProfile).Assembly);
+                configuration.AddProfile(new DocumentMappingProfile(azureStorage));
+                configuration.AddProfile<CustomerMappingProfile>();
             });
 
             IMapper mapper = mappingConfig.CreateMapper();
@@ -44,6 +48,13 @@ namespace Apic.Web.Extensions
 
             return services;
         }
+
+	    public static IServiceCollection AddCustomizedAzureStorage(this IServiceCollection services)
+	    {
+	        services.AddScoped<IAzureStorageService, AzureStorageService>();
+
+	        return services;
+	    }
 
         public static IServiceCollection AddCustomizedBeatPulseHealthCheck(this IServiceCollection services, IConfiguration configuration)
 		{

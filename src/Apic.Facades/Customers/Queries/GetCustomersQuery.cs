@@ -5,6 +5,7 @@ using Apic.Common.Extensions;
 using Apic.Contracts.Customers;
 using Apic.Data.Context;
 using Apic.Facades.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using CustomerDbo = Apic.Entities.Customers.Customer;
 
 namespace Apic.Facades.Customers.Queries

@@ -27,6 +27,18 @@ namespace Apic.Services.Throttling
             return false;
         }
 
+        public int RemainingLimit(IPAddress ipAddress, int limit, TimeSpan timeSpan)
+        {
+            if (!Log.ContainsKey(ipAddress))
+            {
+                return limit;
+            }
+
+            int count = Log[ipAddress].Count(x => x > x.Add(timeSpan.Negate()));
+
+            return limit - count;
+        }
+
         public void LogAccess(IPAddress ipAddress)
         {
             if (!Log.ContainsKey(ipAddress))

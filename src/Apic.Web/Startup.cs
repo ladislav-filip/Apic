@@ -26,7 +26,9 @@ namespace Apic.Web
 
 		public IServiceProvider ConfigureServices(IServiceCollection services)
 		{
-		    services.AddCustomizedAutomapper();
+		    services.AddCustomizedOptions(configuration);
+            services.AddCustomizedAzureStorage();
+            services.AddCustomizedAutomapper();
             services.AddApplicationInsightsTelemetry(configuration);
 			services.AddBeatPulseUI();
 			services.AddCustomizedBeatPulseHealthCheck(configuration);
@@ -34,12 +36,14 @@ namespace Apic.Web
 		    services.AddCustomizedCors();
 			services.AddCustomizedSwagger(configuration);
 		    services.AddCustomizedDbContext(configuration);
-		    services.AddCustomizedOptions(configuration);
-			services.AddCustomizedMvc();
+            services.AddCustomizedMvc();
 
 			WindsorContainer container = new WindsorContainer();
 			container = container.RegisterServices(hostingEnvironment, configuration);
-			return WindsorRegistrationHelper.CreateServiceProvider(container, services);
+
+            IServiceProvider provider = WindsorRegistrationHelper.CreateServiceProvider(container, services);
+
+            return provider;
 		}
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)

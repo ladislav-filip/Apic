@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Apic.Common.Attributes;
 using Apic.Common.Exceptions;
@@ -7,12 +6,9 @@ using Apic.Contracts.Customers;
 using Apic.Contracts.Infrastructure.Transfer;
 using Apic.Data.Context;
 using Apic.Facades.Customers.Queries;
-using Apic.Facades.Mappers;
 using Apic.Services;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Localization;
 using CustomerDbo = Apic.Entities.Customers.Customer;
 
 namespace Apic.Facades.Customers
@@ -44,8 +40,17 @@ namespace Apic.Facades.Customers
 		{
             GetCustomersQuery query = new GetCustomersQuery(dbContext, customerFilter);
             List<Customer> items = await mapper.ProjectTo<Customer>(query.Build()).ToListAsync();
-            return new Collection<Customer>(items, query.Count(), customerFilter);
-        }
+
+            var result = new Collection<Customer>(items, query.Count(), customerFilter);
+
+            // demo purpose only
+		    if (items.Count < result.TotalItems)
+		    {
+                requestState.Messages.Add("Use pagination for showing all records.");
+		    }
+
+		    return result;
+		}
 
         public async Task<Customer> Get(int customerId)
 		{

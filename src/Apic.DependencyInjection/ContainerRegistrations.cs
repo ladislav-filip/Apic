@@ -1,8 +1,7 @@
 using System;
 using Apic.Common.Attributes;
 using Apic.Facades.Customers;
-using Apic.Facades.Customers.Queries;
-using Apic.Facades.Mappers;
+using Apic.Facades.Mappers.Resolvers;
 using Apic.Services;
 using Apic.Services.AzureStorage;
 using Apic.Services.Throttling;
@@ -26,20 +25,20 @@ namespace Apic.DependencyInjection
 				.LifestyleCustom<MsScopedLifestyleManager>());
 
 			// another services
-			container.Register(
-				Component.For<AzureStorageService>()
-				.ImplementedBy<AzureStorageService>()
-				.LifestyleCustom<MsScopedLifestyleManager>());
-
             container.Register(
                 Component.For<ModelStateAccessor>()
                 .ImplementedBy<ModelStateAccessor>()
                 .LifestyleCustom<MsScopedLifestyleManager>());
 
-		    container.Register(
+            container.Register(
 		        Component.For<ThrottlingDemoService>()
 		            .ImplementedBy<ThrottlingDemoService>()
 		            .LifestyleSingleton());
+
+		    container.Register(
+		        Component.For<BlobUrlValueResolver>()
+		            .ImplementedBy<BlobUrlValueResolver>()
+		            .LifestyleTransient());
 
             return container;
 		}

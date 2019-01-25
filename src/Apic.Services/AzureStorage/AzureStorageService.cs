@@ -9,8 +9,8 @@ using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace Apic.Services.AzureStorage
 {
-	public class AzureStorageService
-	{
+    public class AzureStorageService : IAzureStorageService
+    {
 		private readonly AppSettings appSettings;
 
 		public AzureStorageService(IOptions<AppSettings> appSettings)
