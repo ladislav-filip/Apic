@@ -20,14 +20,14 @@ namespace Apic.Web.Areas._Base
         }
 
         public OkObjectResult Ok<T>(T value)
-	    {
-	        var result = new Result<T>
-	        {
-	            Messages = modelStateAccessor.Messages,
-	            Data = value
-	        };
+        {
+            var result = new Result<T>
+            {
+                Messages = modelStateAccessor.Messages,
+                Data = value
+            };
 
-	        return base.Ok(result);
-	    }
-	}
+            return base.Ok(result);
+        }
+    }
 }
