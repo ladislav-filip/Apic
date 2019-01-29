@@ -13,7 +13,7 @@ namespace Apic.Web.Filters.Exception
     /// </summary>
     public class ExceptionFilter : IExceptionFilter
     {
-        private ModelStateAccessor modelStateAccessor; // TODO: zbytečné
+        private ModelStateAccessor modelStateAccessor;
         private IHostingEnvironment host;
 
         public ExceptionFilter(ModelStateAccessor modelStateAccessor, IHostingEnvironment host)

@@ -1,12 +1,10 @@
-using System;
 using System.Net;
-using System.Threading.Tasks;
 using Apic.Contracts.Infrastructure.Transfer;
 using Apic.Services;
 using Microsoft.AspNetCore.Mvc;
 using StatusResults = Apic.Contracts.Infrastructure.Transfer.StatusResults;
 
-namespace Apic.Web.Areas._Base
+namespace Apic.Web.Controllers._Base
 {
     [Route("api")]
 	[ProducesResponseType(typeof(StatusResults.ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]

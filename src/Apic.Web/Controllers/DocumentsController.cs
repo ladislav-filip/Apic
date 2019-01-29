@@ -5,10 +5,10 @@ using Apic.Contracts.Documents;
 using Apic.Contracts.Infrastructure.Transfer;
 using Apic.Facades.Documents;
 using Apic.Services;
-using Apic.Web.Areas._Base;
+using Apic.Web.Controllers._Base;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Apic.Web.Areas.Documents
+namespace Apic.Web.Controllers
 {
     [Area("documents")]
 	public class CustomerDocumentsController : ApiControllerBase

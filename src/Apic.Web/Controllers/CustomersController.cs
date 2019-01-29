@@ -4,11 +4,11 @@ using Apic.Contracts.Customers;
 using Apic.Contracts.Infrastructure.Transfer;
 using Apic.Facades.Customers;
 using Apic.Services;
-using Apic.Web.Areas._Base;
-using Microsoft.AspNetCore.Mvc;
+using Apic.Web.Controllers._Base;
 using Apic.Web.Filters;
+using Microsoft.AspNetCore.Mvc;
 
-namespace Apic.Web.Areas.Customers
+namespace Apic.Web.Controllers
 {
     [Area("customers")]
 	public class CustomersController :  ApiControllerBase

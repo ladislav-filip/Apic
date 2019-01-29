@@ -14,13 +14,7 @@ using DocumentDbo = Apic.Entities.Documents.Document;
 
 namespace Apic.Facades.Documents
 {
-    public interface IDocumentFacade
-	{
-		Task<Document> Get(Guid id);
-		Task<Document> UploadDocument(int customerId, DocumentCreate createRequest, CancellationToken cancellationToken);
-	}
-
-	[ScopedService]
+    [ScopedService]
 	public class DocumentFacade : IDocumentFacade
 	{
 		private readonly ApicDbContext dbContext;

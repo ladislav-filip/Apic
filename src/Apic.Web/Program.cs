@@ -1,7 +1,9 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Apic.Data.Context;
 using Apic.Web.Extensions;
+using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -13,23 +15,33 @@ namespace Apic.Web
     {
         public static async Task Main(string[] args)
         {
-            IWebHost host = WebHost
-                .CreateDefaultBuilder(args)
-                .CustomizeConfigurationFiles()
-                .CustomizeHealtchCheck()
-                .CustomizeLogging()
-                .UseApplicationInsights()
-                .UseStartup<Startup>()
-                .Build();
+            try
+            {
+                IWebHost host = WebHost
+                    .CreateDefaultBuilder(args)
+                    .CustomizeConfigurationFiles()
+                    .CustomizeHealtchCheck()
+                    .CustomizeLogging()
+                    .UseApplicationInsights()
+                    .UseStartup<Startup>()
+                    .Build();
 
-            ProcessCommands(args, host);
+                ProcessCommands(args, host);
 
-            await host.RunAsync();
+                await host.RunAsync();
+            }
+            catch (Exception e)
+            {
+                TelemetryClient tc = new TelemetryClient {InstrumentationKey = ""};
+
+                tc.TrackTrace("Startup Error");
+                tc.TrackException(e);
+            }
         }
 
         private static void ProcessCommands(string[] args, IWebHost host)
         {
-            if (args.Contains("migratedb"))
+            if (!args.Contains("disablemigrations"))
             {
                 MigrateDatabase(host);
             }
