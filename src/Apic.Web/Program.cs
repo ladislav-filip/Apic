@@ -8,6 +8,8 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Configuration;
 
 namespace Apic.Web
 {
@@ -24,7 +26,14 @@ namespace Apic.Web
                     .CustomizeLogging()
                     .UseApplicationInsights()
                     .UseStartup<Startup>()
+                    .ConfigureLogging((hostingContext, logging) =>
+                    {
+                        logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
+                        logging.AddConsole();
+                        logging.AddDebug();
+                    })
                     .Build();
+
 
                 ProcessCommands(args, host);
 

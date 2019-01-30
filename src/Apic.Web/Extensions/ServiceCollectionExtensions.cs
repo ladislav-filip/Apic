@@ -10,7 +10,6 @@ using AutoMapper;
 using BeatPulse;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -97,7 +96,11 @@ namespace Apic.Web.Extensions
 
 		public static IServiceCollection AddCustomizedMvc(this IServiceCollection services)
 		{
-			IMvcBuilder mvc = services.AddMvc(options =>
+            services.AddScoped<ExceptionFilter>();
+            services.AddScoped<ValidationFilter>();
+            services.AddScoped<ApiResultFilter>();
+
+            IMvcBuilder mvc = services.AddMvc(options =>
 			{
 				options.ReturnHttpNotAcceptable = true;
 				options.RespectBrowserAcceptHeader = true;
@@ -107,9 +110,9 @@ namespace Apic.Web.Extensions
 				options.FormatterMappings.SetMediaTypeMappingForFormat("js", MediaTypeHeaderValue.Parse("application/json"));
 				options.FormatterMappings.SetMediaTypeMappingForFormat("json", MediaTypeHeaderValue.Parse("application/json"));
 
-                options.Filters.Add(new ExceptionFilterFactory());
-				options.Filters.Add(new ValidationFilterFactory());
-                options.Filters.Add(new ApiResultFilterFactory());
+                options.Filters.AddService(typeof(ExceptionFilter));
+                options.Filters.AddService(typeof(ValidationFilter));
+                options.Filters.AddService(typeof(ApiResultFilter));
             });
 
 			services.Configure<FormOptions>(options =>
