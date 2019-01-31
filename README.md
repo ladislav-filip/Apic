@@ -27,6 +27,23 @@ Současný stav projektu je ve fázi prototypu.
 - AutoMapper 8.0
 - MSTest, Moq, FluentAssertions
 
+
+<p>&nbsp;</p>
+
+📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄
+<div>
+  <h2><a href="https://www.miroslavholec.cz">Webové API na zakázku</a></h2>
+  <p><q>Chystáte se napsat vlastní webové API? Nedělejte chyby, které udělaly tisíce vývojářů. Využijte mé služby a navrhneme 
+    skvělé Web API společnými silami. Poskytuji konzultace, školení, workshopy i vývojářskou kapacitu pro návrh architektury
+    vašeho budoucího API, na kterém se vám bude dobře stavět.</q>
+  </p>
+  <p><a href="https://www.miroslavholec.cz"> 👉 <strong>Více o mně najdete na miroslavholec.cz</strong></a></p>
+</div>
+
+📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄📄
+
+<p>&nbsp;</p>
+
 ## Guidelines
 
 Cílem solution **(src)** je poskytnout vývojářům výchozí šablonu, pro tvorbu RESTových Web API postavených na webovém frameworku ASP.NET Core a souvisejících technologiích (viz. výše). Architektura celého řešení zohledňuje dle priority od nejdůležitější:
