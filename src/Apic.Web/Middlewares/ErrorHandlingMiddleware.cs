@@ -135,11 +135,6 @@ namespace Apic.Web.Middlewares
 				DeclaredType = details.GetType(),
 			};
 
-			result.ContentTypes.Add("application/problem+json");
-			result.ContentTypes.Add("application/problem+xml");
-			result.ContentTypes.Add("application/json");
-			result.ContentTypes.Add("application/xml");
-
 			return executor.ExecuteAsync(actionContext, result);
 		}
 	}
