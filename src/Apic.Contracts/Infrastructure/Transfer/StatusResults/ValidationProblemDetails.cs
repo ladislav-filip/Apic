@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Net;
 
 namespace Apic.Contracts.Infrastructure.Transfer.StatusResults
 {
+    [Serializable]
     public class ValidationProblemDetails : ProblemDetails
     {
         public ValidationProblemDetails()

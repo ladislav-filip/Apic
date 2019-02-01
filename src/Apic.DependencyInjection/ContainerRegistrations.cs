@@ -1,5 +1,6 @@
 using System;
 using Apic.Common.Attributes;
+using Apic.Data.Repositories;
 using Apic.Facades.Customers;
 using Apic.Facades.Mappers.Resolvers;
 using Apic.Services;
@@ -24,7 +25,13 @@ namespace Apic.DependencyInjection
 				.WithService.DefaultInterfaces()
 				.LifestyleCustom<MsScopedLifestyleManager>());
 
-			// another services
+            container.Register(Classes
+                .FromAssemblyContaining(typeof(CustomerRepository))
+                .Where(x => Attribute.IsDefined(x, typeof(ScopedServiceAttribute)))
+                .WithService.DefaultInterfaces()
+                .LifestyleCustom<MsScopedLifestyleManager>());
+
+            // another services
             container.Register(
                 Component.For<ModelStateAccessor>()
                 .ImplementedBy<ModelStateAccessor>()

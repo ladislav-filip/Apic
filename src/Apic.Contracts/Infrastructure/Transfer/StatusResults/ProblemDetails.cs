@@ -3,8 +3,13 @@ using System.Net;
 
 namespace Apic.Contracts.Infrastructure.Transfer.StatusResults
 {
-	public class ProblemDetails
+    [Serializable]
+    public class ProblemDetails
 	{
+        public ProblemDetails()
+        {
+        }
+
 		public string Type { get; set; }
 		public string Title { get; set; }
 

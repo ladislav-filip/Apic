@@ -5,6 +5,7 @@ using Apic.Common.Attributes;
 using Apic.Common.Exceptions;
 using Apic.Contracts.Documents;
 using Apic.Data.Context;
+using Apic.Data.Repositories;
 using Apic.Services.AzureStorage;
 using Apic.Services.Documents;
 using AutoMapper;
@@ -20,22 +21,19 @@ namespace Apic.Facades.Documents
 		private readonly ApicDbContext dbContext;
 		private readonly IAzureStorageService azureStorageService;
 		private readonly IMapper mapper;
+        private readonly DocumentRepository documentRepository;
  
-		public DocumentFacade(ApicDbContext dbContext, IAzureStorageService azureStorageService, IMapper mapper)
+		public DocumentFacade(ApicDbContext dbContext, IAzureStorageService azureStorageService, IMapper mapper, DocumentRepository documentRepository)
 		{
 			this.dbContext = dbContext;
 			this.azureStorageService = azureStorageService;
 			this.mapper = mapper;
-		}
+            this.documentRepository = documentRepository;
+        }
 
 		public async Task<Document> Get(Guid id)
-		{
-			DocumentDbo document = await dbContext.Documents.FirstOrDefaultAsync(x => x.Id == id);
-			if (document == null)
-			{
-                throw new ObjectNotFoundException("Dokument nebyl nalezen");
-			}
-
+        {
+            DocumentDbo document = await documentRepository.GetSingle(id);
             Document doc = mapper.Map<Document>(document);
 
 			return doc;

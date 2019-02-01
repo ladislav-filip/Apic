@@ -5,9 +5,10 @@ using Apic.Services.AzureStorage;
 using Apic.Web.Cors;
 using Apic.Web.Filters.Action;
 using Apic.Web.Filters.Exception;
-using Apic.Web.Filters.Result;
 using AutoMapper;
 using BeatPulse;
+using BeatPulse.UI;
+using Microsoft.AspNetCore.Antiforgery.Internal;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -55,7 +56,7 @@ namespace Apic.Web.Extensions
 	        return services;
 	    }
 
-        public static IServiceCollection AddCustomizedBeatPulseHealthCheck(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddCustomizedBeatPulse(this IServiceCollection services, IConfiguration configuration)
 		{
 			string sqlConnectionString = configuration.GetConnectionString("Default");
 
@@ -63,6 +64,8 @@ namespace Apic.Web.Extensions
 			{
 				setup.AddSqlServer(sqlConnectionString);
 			});
+
+            services.AddBeatPulseUI();
 
 			return services;
 		}
@@ -98,7 +101,6 @@ namespace Apic.Web.Extensions
 		{
             services.AddScoped<ExceptionFilter>();
             services.AddScoped<ValidationFilter>();
-            services.AddScoped<ApiResultFilter>();
 
             IMvcBuilder mvc = services.AddMvc(options =>
 			{
@@ -112,7 +114,7 @@ namespace Apic.Web.Extensions
 
                 options.Filters.AddService(typeof(ExceptionFilter));
                 options.Filters.AddService(typeof(ValidationFilter));
-                options.Filters.AddService(typeof(ApiResultFilter));
+                //options.Filters.AddService(typeof(ApiResultFilter));
             });
 
 			services.Configure<FormOptions>(options =>

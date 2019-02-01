@@ -1,7 +1,14 @@
-﻿namespace Apic.Contracts.Infrastructure.Transfer.StatusResults
+using System;
+
+namespace Apic.Contracts.Infrastructure.Transfer.StatusResults
 {
-	public class ValidationErrorMessage
+    [Serializable]
+    public class ValidationErrorMessage
 	{
+        public ValidationErrorMessage()
+        {
+        }
+
 		public ValidationErrorMessage(string key, string message)
 		{
 			Key = key;

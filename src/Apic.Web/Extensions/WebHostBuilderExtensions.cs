@@ -5,7 +5,7 @@ namespace Apic.Web.Extensions
 {
 	public static class WebHostBuilderExtensions
 	{
-		public static IWebHostBuilder CustomizeConfigurationFiles(this IWebHostBuilder webHost)
+		public static IWebHostBuilder UseCustomizedConfigurationFiles(this IWebHostBuilder webHost)
 		{
 			webHost.ConfigureAppConfiguration((host, config) => config.AddIniFile("appsettings.ini", false));
 			webHost.ConfigureAppConfiguration((host, config) => config.AddIniFile($"appsettings.{host.HostingEnvironment.EnvironmentName}.ini", true));
@@ -13,16 +13,16 @@ namespace Apic.Web.Extensions
 			return webHost;
 		}
 
-		public static IWebHostBuilder CustomizeLogging(this IWebHostBuilder webHost)
+		public static IWebHostBuilder UseCustomizedLogging(this IWebHostBuilder webHost)
 		{
 			return webHost;
 		}
 
-		public static IWebHostBuilder CustomizeHealtchCheck(this IWebHostBuilder webHost)
+		public static IWebHostBuilder UseCustomizedBeatPulse(this IWebHostBuilder webHost)
 		{
 			webHost = webHost.UseBeatPulse(options =>
 			{
-				options.ConfigurePath("health")
+				options.ConfigurePath("hc")
 					.ConfigureTimeout(1500)
 					.ConfigureDetailedOutput(true, true);
 			});

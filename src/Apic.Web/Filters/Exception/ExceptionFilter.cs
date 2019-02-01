@@ -1,3 +1,4 @@
+using System.Net;
 using Apic.Contracts.Infrastructure.Transfer.StatusResults;
 using Apic.Services;
 using Apic.Web.Extensions;
@@ -5,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using ProblemDetails = Apic.Contracts.Infrastructure.Transfer.StatusResults.ProblemDetails;
+using ValidationProblemDetails = Apic.Contracts.Infrastructure.Transfer.StatusResults.ValidationProblemDetails;
 
 namespace Apic.Web.Filters.Exception
 {
@@ -25,16 +27,18 @@ namespace Apic.Web.Filters.Exception
         public void OnException(ExceptionContext context)
         {
             context.ModelState.AddModelError("", context.Exception.Message);
-            var message = ValidationProblemDetailsHelper.FromErrors(context.ModelState.ToValidationErrorMessages());
-            
-            context.ExceptionHandled = true;
+            ValidationProblemDetails message = ValidationProblemDetailsHelper.FromErrors(context.ModelState.ToValidationErrorMessages());
 
             switch (context.Exception.GetType().ToString())
             {
                 case "Apic.Common.Exceptions.RequestFailedException":
+                    message.Title = "Request cannot be processed";
+                    message.Status = (int) HttpStatusCode.BadRequest;
                     context.Result = new BadRequestObjectResult(message);
                     return;
                 case "Apic.Common.Exceptions.ObjectNotFoundException":
+                    message.Status = (int)HttpStatusCode.NotFound;
+                    message.Title = "Requested resource has not been found";
                     context.Result = new NotFoundObjectResult(message);
                     return;
                 default:
@@ -45,6 +49,8 @@ namespace Apic.Web.Filters.Exception
                     };
                     break;
             }
+
+            context.ExceptionHandled = true;
         }
     }
 }

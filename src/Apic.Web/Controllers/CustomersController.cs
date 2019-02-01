@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Apic.Web.Controllers
 {
-    [Area("customers")]
 	public class CustomersController :  ApiControllerBase
 	{
 		private readonly ICustomerFacade customerFacade;
@@ -54,7 +53,7 @@ namespace Apic.Web.Controllers
 		[Route("customers")]
 		[HttpPost]
 		[ProducesResponseType(typeof(Result<Customer>), (int)HttpStatusCode.Created)]
-		public async Task<IActionResult> Post([FromBody]CustomerCreate model)
+        public async Task<IActionResult> Post([FromBody]CustomerCreate model)
 		{
             Customer result = await customerFacade.Create(model);
 

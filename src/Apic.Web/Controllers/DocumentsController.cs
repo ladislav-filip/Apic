@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Apic.Web.Controllers
 {
-    [Area("documents")]
 	public class CustomerDocumentsController : ApiControllerBase
 	{
 		private readonly IDocumentFacade documentFacade;

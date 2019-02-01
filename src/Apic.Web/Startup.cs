@@ -17,12 +17,14 @@ namespace Apic.Web
     {
 	    private readonly IHostingEnvironment hostingEnvironment;
 	    private readonly IConfiguration configuration;
+        private readonly ILogger<Startup> logger;
 
-		public Startup(IHostingEnvironment hostingEnvironment, IConfiguration configuration)
+		public Startup(IHostingEnvironment hostingEnvironment, IConfiguration configuration, ILogger<Startup> logger)
 		{
 			this.hostingEnvironment = hostingEnvironment;
 			this.configuration = configuration;
-		}
+            this.logger = logger;
+        }
 
 		public IServiceProvider ConfigureServices(IServiceCollection services)
 		{
@@ -31,8 +33,7 @@ namespace Apic.Web
             services.AddCustomizedAzureStorage();
             services.AddCustomizedAutomapper();
             services.AddApplicationInsightsTelemetry(configuration);
-			services.AddBeatPulseUI();
-			services.AddCustomizedBeatPulseHealthCheck(configuration);
+			services.AddCustomizedBeatPulse(configuration);
 		    services.AddResponseCaching();
 		    services.AddCustomizedCors();
 			services.AddCustomizedSwagger(configuration);
@@ -51,9 +52,9 @@ namespace Apic.Web
         {
 	        loggerFactory.AddApplicationInsights(app.ApplicationServices);
 
-            app.UseCors();
 	        app.UseBeatPulseUI();
-	        app.UseResponseCaching();
+            app.UseCors();
+            app.UseResponseCaching();
 	        app.UseCustomizedExceptionHandling();
             app.UseThrottlingMiddleware();
 	        app.UseCustomizedSwagger();

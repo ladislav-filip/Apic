@@ -7,9 +7,9 @@ namespace Apic.Web.Extensions
     {
         public static bool ContainsFilter(this ActionDescriptor actionDescription, Type type)
         {
-            foreach (var filterDescriptors in actionDescription.FilterDescriptors)
+            foreach (var filterDescriptors in actionDescription.EndpointMetadata)
             {
-                if (filterDescriptors.Filter.GetType() == type)
+                if (filterDescriptors.GetType() == type)
                 {
                     return true;
                 }

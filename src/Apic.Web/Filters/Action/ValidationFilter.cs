@@ -27,15 +27,18 @@ namespace Apic.Web.Filters.Action
 
             if (!context.ModelState.IsValid && !context.ActionDescriptor.ContainsFilter(typeof(IgnoreModelStateOnBinding)))
             {
-                var message = ValidationProblemDetails.FromErrors(context.ModelState.ToValidationErrorMessages());
+                ValidationProblemDetails message = ValidationProblemDetails.FromErrors(context.ModelState.ToValidationErrorMessages());
                 context.Result = new BadRequestObjectResult(message);
-                return;
             }
 		}
 
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            // nemá využití
+            if (!context.ModelState.IsValid)
+            {
+                var message = ValidationProblemDetails.FromErrors(context.ModelState.ToValidationErrorMessages());
+                context.Result = new BadRequestObjectResult(message);
+            }
         }
 
         private void CopyModelStateToModelStateAccessor(ActionExecutingContext context)

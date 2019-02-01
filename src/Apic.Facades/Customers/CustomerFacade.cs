@@ -5,6 +5,7 @@ using Apic.Common.Exceptions;
 using Apic.Contracts.Customers;
 using Apic.Contracts.Infrastructure.Transfer;
 using Apic.Data.Context;
+using Apic.Data.Repositories;
 using Apic.Facades.Customers.Queries;
 using Apic.Services;
 using AutoMapper;
@@ -19,13 +20,15 @@ namespace Apic.Facades.Customers
 		private readonly ApicDbContext dbContext;
 		private readonly IMapper mapper;
         private readonly ModelStateAccessor requestState;
+        private readonly CustomerRepository customerRepository;
 
-		public CustomerFacade(ApicDbContext dbContext, IMapper mapper, ModelStateAccessor requestState)
+		public CustomerFacade(ApicDbContext dbContext, IMapper mapper, ModelStateAccessor requestState, CustomerRepository customerRepository)
 		{
 			this.dbContext = dbContext;
 			this.mapper = mapper;
             this.requestState = requestState;
-		}
+            this.customerRepository = customerRepository;
+        }
 
 		public async Task<Collection<Customer>> Get(CustomerFilter customerFilter)
 		{
@@ -45,12 +48,7 @@ namespace Apic.Facades.Customers
 
         public async Task<Customer> Get(int customerId)
 		{
-			CustomerDbo customer = await dbContext.Customers.FirstOrDefaultAsync(x => x.Id == customerId);
-            if (customer == null)
-            {
-                throw new ObjectNotFoundException("Customer was not found!");
-            }
-
+            CustomerDbo customer = await customerRepository.GetSingle(customerId);
             Customer customerResult = mapper.Map<Customer>(customer);
 			return customerResult;
 		}
@@ -69,8 +67,8 @@ namespace Apic.Facades.Customers
 
 		public async Task<Customer> Update(int id, CustomerUpdate model)
 		{
-			CustomerDbo customer = await dbContext.Customers.FirstOrDefaultAsync(x => x.Id == id);
-			customer = mapper.Map(model, customer);
+            CustomerDbo customer = await customerRepository.GetSingle(id);
+            customer = mapper.Map(model, customer);
 
 			await dbContext.SaveChangesAsync();
 			Customer result = mapper.Map<Customer>(customer);

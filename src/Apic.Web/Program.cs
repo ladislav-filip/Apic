@@ -4,12 +4,11 @@ using System.Threading.Tasks;
 using Apic.Data.Context;
 using Apic.Web.Extensions;
 using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Configuration;
 
 namespace Apic.Web
 {
@@ -21,19 +20,12 @@ namespace Apic.Web
             {
                 IWebHost host = WebHost
                     .CreateDefaultBuilder(args)
-                    .CustomizeConfigurationFiles()
-                    .CustomizeHealtchCheck()
-                    .CustomizeLogging()
+                    .UseCustomizedConfigurationFiles()
+                    .UseCustomizedBeatPulse()
+                    .UseCustomizedLogging()
                     .UseApplicationInsights()
                     .UseStartup<Startup>()
-                    .ConfigureLogging((hostingContext, logging) =>
-                    {
-                        logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
-                        logging.AddConsole();
-                        logging.AddDebug();
-                    })
                     .Build();
-
 
                 ProcessCommands(args, host);
 
@@ -41,10 +33,12 @@ namespace Apic.Web
             }
             catch (Exception e)
             {
-                TelemetryClient tc = new TelemetryClient {InstrumentationKey = ""};
+                TelemetryConfiguration.Active.InstrumentationKey = "663d2b21-f9d7-4a2a-a398-8de4f92fdf5a";
+                var telemetryClient = new TelemetryClient();
 
-                tc.TrackTrace("Startup Error");
-                tc.TrackException(e);
+                telemetryClient.TrackTrace("Startup Error");
+                telemetryClient.TrackException(e);
+                telemetryClient.Flush();
             }
         }
 
