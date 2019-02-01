@@ -5,6 +5,7 @@ using Apic.Web.Middlewares;
 using BeatPulse.UI;
 using Castle.Windsor;
 using Castle.Windsor.MsDependencyInjection;
+using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -48,8 +49,10 @@ namespace Apic.Web
             return provider;
 		}
 
-        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory, IApplicationLifetime applicationLifetime)
         {
+            applicationLifetime.ApplicationStopping.Register(ApplicationStopping);
+
 	        loggerFactory.AddApplicationInsights(app.ApplicationServices);
 
 	        app.UseBeatPulseUI();
@@ -61,6 +64,11 @@ namespace Apic.Web
             app.UseCustomizedOptionsMethodMiddleware();
             app.UseCustomizedCors();
             app.UseMvc();
+        }
+
+        private void ApplicationStopping()
+        {
+            // cleanup
         }
     }
 }
