@@ -25,7 +25,7 @@ namespace Apic.Data.Repositories
             {
                 return await db.Set<Customer>().SingleAsync(x => x.Id == customerId);
             }
-            catch (InvalidOperationException exception) when (exception.Message.Contains("Sequence contains"))
+            catch (InvalidOperationException exception) when (exception.Message.Contains("contain any elements"))
             {
                 throw new ObjectNotFoundException("Customer has not been found!");
             }

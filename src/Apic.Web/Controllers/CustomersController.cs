@@ -22,7 +22,6 @@ namespace Apic.Web.Controllers
 		[Route("customers")]
 		[HttpGet, HttpHead]
         [ProducesResponseType(typeof(Result<Collection<Customer>>), (int)HttpStatusCode.OK)]
-        [IgnoreModelStateOnBinding]
 		public async Task<IActionResult> Get([FromQuery]CustomerFilter filter)
 		{
 			Collection<Customer> result = await customerFacade.Get(filter);

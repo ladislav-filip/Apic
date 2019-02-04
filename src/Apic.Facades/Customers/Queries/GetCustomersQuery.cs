@@ -38,7 +38,7 @@ namespace Apic.Facades.Customers.Queries
 
             if (Filter.LastName.IsNotNullOrEmpty())
             {
-                query = query.Where(x => x.Email.Equals(Filter.Domain, StringComparison.InvariantCultureIgnoreCase));
+                query = query.Where(x => x.LastName.Equals(Filter.LastName, StringComparison.InvariantCultureIgnoreCase));
             }
 
             return query;
