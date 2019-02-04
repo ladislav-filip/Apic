@@ -31,6 +31,7 @@ namespace Apic.Web
 		{
 		    services.AddCors();
 		    services.AddCustomizedOptions(configuration);
+            services.AddAuthentication();
             services.AddCustomizedAzureStorage();
             services.AddCustomizedAutomapper();
             services.AddApplicationInsightsTelemetry(configuration);
@@ -59,6 +60,7 @@ namespace Apic.Web
             app.UseCors();
             app.UseResponseCaching();
 	        app.UseCustomizedExceptionHandling();
+            app.UseAuthentication();
             app.UseThrottlingMiddleware();
 	        app.UseCustomizedSwagger();
             app.UseCustomizedOptionsMethodMiddleware();

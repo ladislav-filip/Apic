@@ -12,5 +12,6 @@ Foreach-Object {
     [IO.File]::WriteAllText($_.FullName, $Content, [System.Text.Encoding]::UTF8)
 }
 
-Get-ChildItem -recurse Apic*  | Rename-Item -NewName {$_.name -replace '^Apic',$Project}
+Get-ChildItem -recurse *.csproj | Rename-Item -NewName {$_.name -replace '^Apic', $Project}
+Get-ChildItem -recurse Apic* | Rename-Item -NewName {$_.name -replace '^Apic', $Project}
 # Rename-Item -path ([System.IO.Path]::Combine($SolutionFolder, 'Apic.sln')) -newName ($Project + '.sln')
