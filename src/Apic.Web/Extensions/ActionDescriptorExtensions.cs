@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc.Abstractions;
+﻿using Microsoft.AspNetCore.Mvc.Abstractions;
 using System;
 
 namespace Apic.Web.Extensions

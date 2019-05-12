@@ -1,5 +1,5 @@
-param (
-    [string]$Project = "NewProjectTemplate"
+﻿param (
+    [string]$Project = "Apic"
 )
 
 [string]$SolutionFolder = [System.IO.Path]::GetDirectoryName($MyInvocation.MyCommand.Path);
