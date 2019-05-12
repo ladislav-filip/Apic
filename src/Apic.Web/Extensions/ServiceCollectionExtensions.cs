@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Apic.Common.Options;
+using Apic.Contracts.Customers;
 using Apic.Data.Context;
 using Apic.Facades.Mappers;
 using Apic.Services.AzureStorage;
@@ -12,7 +13,6 @@ using Apic.Web.Filters.Exception;
 using AutoMapper;
 using BeatPulse;
 using BeatPulse.UI;
-using Microsoft.AspNetCore.Antiforgery.Internal;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -43,6 +43,8 @@ namespace Apic.Web.Extensions
 
 				// zahrne XML soubory s dokumentací
 				x.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, XmlFileName(typeof(Startup))));
+				x.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, XmlFileName(typeof(ApplicationSettings))));
+				x.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, XmlFileName(typeof(Customer))));
                 
 				// všechno camelcase
 				x.DescribeAllParametersInCamelCase();
