@@ -7,15 +7,27 @@ namespace Apic.Web.Extensions
 	{
 		public static IWebHostBuilder UseCustomizedConfigurationFiles(this IWebHostBuilder webHost)
 		{
-			webHost.ConfigureAppConfiguration((host, config) => config.AddIniFile("appsettings.ini", false));
-			webHost.ConfigureAppConfiguration((host, config) => config.AddIniFile($"appsettings.{host.HostingEnvironment.EnvironmentName}.ini", true));
+			
+			webHost.ConfigureAppConfiguration((host, config) =>
+			{
+				config.Sources.Clear();
+				
+				config.AddJsonFile("appsettings.json", true);
+				config.AddJsonFile($"appsettings.{host.HostingEnvironment.EnvironmentName}.json", true);
+				
+				config.AddIniFile("appsettings.ini", true);
+				config.AddIniFile($"appsettings.{host.HostingEnvironment.EnvironmentName}.ini", true);
+			});
 
 			return webHost;
 		}
 
 		public static IWebHostBuilder UseCustomizedLogging(this IWebHostBuilder webHost)
 		{
-			return webHost;
+			return webHost.ConfigureLogging(builder =>
+			{
+				
+			});
 		}
 
 		public static IWebHostBuilder UseCustomizedBeatPulse(this IWebHostBuilder webHost)

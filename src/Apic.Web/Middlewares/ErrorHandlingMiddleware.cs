@@ -72,12 +72,12 @@ namespace Apic.Web.Middlewares
 
 		private object GetProblemResult(HttpContext context)
 		{
-			if (context.Response.StatusCode == (int)HttpStatusCode.NotFound)
+			if (context.Response.StatusCode == StatusCodes.Status404NotFound)
 			{
 				return ProblemDetails.FromMessage(HttpStatusCode.NotFound);
 			}
 
-			if (context.Response.StatusCode == (int)HttpStatusCode.UnsupportedMediaType)
+			if (context.Response.StatusCode == StatusCodes.Status415UnsupportedMediaType)
 			{
 				return ProblemDetails.FromMessage(HttpStatusCode.UnsupportedMediaType);
 			}

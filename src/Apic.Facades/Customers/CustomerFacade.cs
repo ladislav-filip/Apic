@@ -17,22 +17,20 @@ namespace Apic.Facades.Customers
     [ScopedService]
 	public class CustomerFacade : ICustomerFacade
 	{
-		private readonly ApicDbContext dbContext;
+		private readonly IUnitOfWork uow;
 		private readonly IMapper mapper;
         private readonly ModelStateAccessor requestState;
-        private readonly CustomerRepository customerRepository;
 
-		public CustomerFacade(ApicDbContext dbContext, IMapper mapper, ModelStateAccessor requestState, CustomerRepository customerRepository)
+		public CustomerFacade(IUnitOfWork uow, IMapper mapper, ModelStateAccessor requestState)
 		{
-			this.dbContext = dbContext;
+			this.uow = uow;
 			this.mapper = mapper;
             this.requestState = requestState;
-            this.customerRepository = customerRepository;
         }
 
 		public async Task<Collection<Customer>> Get(CustomerFilter customerFilter)
 		{
-            GetCustomersQuery query = new GetCustomersQuery(dbContext, customerFilter);
+            GetCustomersQuery query = new GetCustomersQuery(uow, customerFilter);
             List<Customer> items = await mapper.ProjectTo<Customer>(query.Build()).ToListAsync();
 
             var result = new Collection<Customer>(items, query.Count(), customerFilter);
@@ -48,7 +46,7 @@ namespace Apic.Facades.Customers
 
         public async Task<Customer> Get(int customerId)
 		{
-            CustomerDbo customer = await customerRepository.GetSingle(customerId);
+            CustomerDbo customer = await uow.Customers.GetSingle(customerId);
             Customer customerResult = mapper.Map<Customer>(customer);
 			return customerResult;
 		}
@@ -57,8 +55,8 @@ namespace Apic.Facades.Customers
 		{
 			CustomerDbo customer = mapper.Map<CustomerDbo>(createRequest);
 
-			dbContext.Customers.Add(customer);
-			await dbContext.SaveChangesAsync();
+			uow.Add(customer);
+			await uow.SaveChangesAsync();
 
 			Customer result = mapper.Map<Customer>(customer);
 
@@ -67,10 +65,10 @@ namespace Apic.Facades.Customers
 
 		public async Task<Customer> Update(int id, CustomerUpdate model)
 		{
-            CustomerDbo customer = await customerRepository.GetSingle(id);
+            CustomerDbo customer = await uow.Customers.GetSingle(id);
             customer = mapper.Map(model, customer);
 
-			await dbContext.SaveChangesAsync();
+			await uow.SaveChangesAsync();
 			Customer result = mapper.Map<Customer>(customer);
 
 			return result;
@@ -78,14 +76,14 @@ namespace Apic.Facades.Customers
 
 		public async Task Delete(int customerId)
 		{
-			bool existsCustomer = await dbContext.Customers.AnyAsync(x => x.Id == customerId);
+			bool existsCustomer = await uow.Set<Customer>().AnyAsync(x => x.Id == customerId);
 			if (!existsCustomer)
 			{
                 throw new ObjectNotFoundException("Customer was not found");
 			}
 
-            dbContext.Customers.Remove(new CustomerDbo { Id = customerId });
-			await dbContext.SaveChangesAsync();
+            uow.Remove(new CustomerDbo { Id = customerId });
+			await uow.SaveChangesAsync();
 		}
 	}
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Net;
+using Microsoft.AspNetCore.Http;
 
 namespace Apic.Contracts.Infrastructure.Transfer.StatusResults
 {
@@ -37,7 +38,7 @@ namespace Apic.Contracts.Infrastructure.Transfer.StatusResults
 			{
 				Title = HttpStatusCode.InternalServerError.ToString(),
 				Type = typeof(ProblemDetails).Name,
-				Status = (int)HttpStatusCode.InternalServerError,
+				Status = StatusCodes.Status500InternalServerError,
 				Detail = ex.Message
             };
 

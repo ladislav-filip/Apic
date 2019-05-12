@@ -5,7 +5,7 @@ using Apic.Entities.Customers;
 
 namespace Apic.Entities.Documents
 {
-	public class Document
+	public class Document : IDomainEntity<Guid>
 	{
 		public Document()
 		{

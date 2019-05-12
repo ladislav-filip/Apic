@@ -7,7 +7,7 @@ using Apic.Entities.OwnedTypes;
 
 namespace Apic.Entities.Customers
 {
-	public class Customer
+	public class Customer : IDomainEntity<int>
 	{
 		public Customer()
 		{

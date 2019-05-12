@@ -9,8 +9,15 @@ namespace Apic.Contracts.Customers
 			MaxPageSize = 100;
 		}
 
+		/// <summary>
+		/// Sort column name. Default is "Id". 
+		/// </summary>
 	    public override string Sort { get; set; } = "Id";
-	    public string LastName { get; set; }
+	    
+		/// <summary>
+		/// LastName starts with
+		/// </summary>
+		public string LastName { get; set; }
         public string Domain { get; set; }
 	}
 }

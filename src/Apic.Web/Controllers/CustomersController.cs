@@ -6,6 +6,7 @@ using Apic.Facades.Customers;
 using Apic.Services;
 using Apic.Web.Controllers._Base;
 using Apic.Web.Filters;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Apic.Web.Controllers
@@ -21,8 +22,8 @@ namespace Apic.Web.Controllers
 
 		[Route("customers")]
 		[HttpGet, HttpHead]
-        [ProducesResponseType(typeof(Result<Collection<Customer>>), (int)HttpStatusCode.OK)]
-		public async Task<IActionResult> Get([FromQuery]CustomerFilter filter)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+		public async Task<ActionResult<Result<Collection<Customer>>>> GetCustomers([FromQuery]CustomerFilter filter)
 		{
 			Collection<Customer> result = await customerFacade.Get(filter);
 
@@ -31,8 +32,8 @@ namespace Apic.Web.Controllers
 
 		[Route("customers/{id:int}")]
 		[HttpGet, HttpHead]
-        [ProducesResponseType(typeof(Result<Customer>), (int)HttpStatusCode.OK)]
-		public async Task<IActionResult> Get(int id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+		public async Task<ActionResult<Result<Customer>>> GetCustomer(int id)
 		{
             Customer result = await customerFacade.Get(id);
 
@@ -41,8 +42,8 @@ namespace Apic.Web.Controllers
 
 		[Route("customers/{id:int}")]
 		[HttpPut]
-		[ProducesResponseType(typeof(Result<Customer>), (int)HttpStatusCode.OK)]
-		public async Task<IActionResult> Put(int id, [FromBody]CustomerUpdate model)
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		public async Task<ActionResult<Result<Customer>>> UpdateCustomer(int id, [FromBody]CustomerUpdate model)
 		{
             Customer result = await customerFacade.Update(id, model);
 
@@ -51,18 +52,18 @@ namespace Apic.Web.Controllers
 
 		[Route("customers")]
 		[HttpPost]
-		[ProducesResponseType(typeof(Result<Customer>), (int)HttpStatusCode.Created)]
-        public async Task<IActionResult> Post([FromBody]CustomerCreate model)
+		[ProducesResponseType(StatusCodes.Status201Created)]
+        public async Task<ActionResult<Result<Customer>>> CreateCustomer([FromBody]CustomerCreate model)
 		{
             Customer result = await customerFacade.Create(model);
 
-			return CreatedAtAction(nameof(Get), new {id = result.Id}, result);
+			return CreatedAtAction(nameof(GetCustomer), new {id = result.Id}, result);
 		}
 
 	    [Route("customers/{id:int}")]
 	    [HttpDelete]
-	    [ProducesResponseType(typeof(Result<Customer>), (int)HttpStatusCode.NoContent)]
-	    public async Task<IActionResult> Delete(int id)
+	    [ProducesResponseType(StatusCodes.Status204NoContent)]
+	    public async Task<ActionResult<Result<Customer>>> DeleteCustomer(int id)
 	    {
 	        await customerFacade.Delete(id);
 

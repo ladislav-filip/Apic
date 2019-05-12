@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using Microsoft.AspNetCore.Http;
 
 namespace Apic.Contracts.Infrastructure.Transfer.StatusResults
 {
@@ -18,7 +19,7 @@ namespace Apic.Contracts.Infrastructure.Transfer.StatusResults
         {
             return new ValidationProblemDetails()
             {
-                Status = (int)HttpStatusCode.BadRequest,
+                Status = StatusCodes.Status400BadRequest,
                 Title = HttpStatusCode.BadRequest.ToString(),
                 Type = typeof(ValidationProblemDetails).Name,
                 Errors = errors

@@ -24,7 +24,7 @@ namespace Apic.Web.Middlewares
             if (httpContext.Request.Method.ToLowerInvariant() == HttpMethods.Options.ToLowerInvariant() && httpContext.Response.StatusCode == (int)HttpStatusCode.MethodNotAllowed)
             {
                 httpContext.Response.Headers[HttpResponseHeader.Allow.ToString()] += ", OPTIONS";
-                httpContext.Response.StatusCode = (int) HttpStatusCode.OK;
+                httpContext.Response.StatusCode = StatusCodes.Status200OK;
             }
         }
     }

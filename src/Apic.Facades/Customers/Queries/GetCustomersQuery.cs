@@ -12,7 +12,7 @@ namespace Apic.Facades.Customers.Queries
 {
     public class GetCustomersQuery : QueryBase<CustomerDbo, CustomerFilter>
     {
-        public GetCustomersQuery(ApicDbContext db, CustomerFilter filter) : base(db, filter)
+        public GetCustomersQuery(IUnitOfWork db, CustomerFilter filter) : base(db, filter)
         {
         }
 

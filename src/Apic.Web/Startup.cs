@@ -40,6 +40,7 @@ namespace Apic.Web
 		    services.AddCustomizedCors();
 			services.AddCustomizedSwagger(configuration);
 		    services.AddCustomizedDbContext(configuration);
+		    services.AddHttpsRedirection(x => x.HttpsPort = 443);
             services.AddCustomizedMvc();
 
 			WindsorContainer container = new WindsorContainer();
@@ -50,15 +51,14 @@ namespace Apic.Web
             return provider;
 		}
 
-        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory, IApplicationLifetime applicationLifetime)
+        public void Configure(IApplicationBuilder app)
         {
-            applicationLifetime.ApplicationStopping.Register(ApplicationStopping);
-
-	        loggerFactory.AddApplicationInsights(app.ApplicationServices);
-
 	        app.UseBeatPulseUI();
+	        app.UseHsts();
             app.UseCors();
             app.UseResponseCaching();
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
 	        app.UseCustomizedExceptionHandling();
             app.UseAuthentication();
             app.UseThrottlingMiddleware();
@@ -66,11 +66,6 @@ namespace Apic.Web
             app.UseCustomizedOptionsMethodMiddleware();
             app.UseCustomizedCors();
             app.UseMvc();
-        }
-
-        private void ApplicationStopping()
-        {
-            // cleanup
         }
     }
 }

@@ -1,4 +1,8 @@
-using Apic.Common.Configuration;
+using System;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using Apic.Common.Options;
 using Apic.Data.Context;
 using Apic.Facades.Mappers;
 using Apic.Services.AzureStorage;
@@ -11,6 +15,7 @@ using BeatPulse.UI;
 using Microsoft.AspNetCore.Antiforgery.Internal;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,12 +27,29 @@ namespace Apic.Web.Extensions
 {
 	public static class ServiceCollectionExtensions
 	{
-		public static IServiceCollection AddCustomizedSwagger(this IServiceCollection services,
-			IConfiguration configuration)
+		public static IServiceCollection AddCustomizedSwagger(this IServiceCollection services, IConfiguration configuration)
 		{
-			services.AddSwaggerGen(c =>
+			string XmlFileName(Type type) =>
+				type.GetTypeInfo()
+					.Module.Name.Replace(".dll", ".xml").Replace(".exe", ".xml");
+			
+			services.AddSwaggerGen(x =>
 			{
-				c.SwaggerDoc("v1", new Info { Title = "API Documentation", Version = "v1" });
+				x.SwaggerDoc("v1", new Info
+				{
+					Title = "API Documentation",
+					Version = "v1",
+				});
+
+				// zahrne XML soubory s dokumentací
+				x.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, XmlFileName(typeof(Startup))));
+                
+				// všechno camelcase
+				x.DescribeAllParametersInCamelCase();
+				x.DescribeStringEnumsInCamelCase();
+                
+				x.EnableAnnotations();
+				x.DescribeAllEnumsAsStrings();
 			});
 
 			return services;
@@ -58,7 +80,7 @@ namespace Apic.Web.Extensions
 
         public static IServiceCollection AddCustomizedBeatPulse(this IServiceCollection services, IConfiguration configuration)
 		{
-			string sqlConnectionString = configuration.GetConnectionString("Default");
+			string sqlConnectionString = configuration.GetConnectionString("SqlLite");
 
 			services.AddBeatPulse(setup =>
 			{
@@ -82,8 +104,10 @@ namespace Apic.Web.Extensions
 
 		public static IServiceCollection AddCustomizedDbContext(this IServiceCollection services, IConfiguration configuration)
 		{
-			string connectionString = configuration.GetConnectionString("Default");
-			services.AddDbContext<ApicDbContext>(options => options.UseSqlServer(connectionString));
+			string connectionString = configuration.GetConnectionString("SqlLite");
+			services.AddDbContext<UnitOfWork>(options => options.UseSqlite(connectionString));
+
+			services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 			return services;
 		}
@@ -112,6 +136,18 @@ namespace Apic.Web.Extensions
 				options.FormatterMappings.SetMediaTypeMappingForFormat("js", MediaTypeHeaderValue.Parse("application/json"));
 				options.FormatterMappings.SetMediaTypeMappingForFormat("json", MediaTypeHeaderValue.Parse("application/json"));
 
+				// zapojení input formatters ve správném pořadí
+				var jsonInputFormatter = options.InputFormatters.FirstOrDefault(x => x.GetType() == typeof(JsonInputFormatter));
+				options.InputFormatters.Clear();
+				options.InputFormatters.Add(jsonInputFormatter);
+				options.InputFormatters.Add(new XmlSerializerInputFormatter(new MvcOptions()));
+
+				// zapojení output formatters ve správném pořadí
+				var jsonOutputFormatter = options.OutputFormatters.FirstOrDefault(x => x.GetType() == typeof(JsonOutputFormatter));
+				options.OutputFormatters.Clear();
+				options.OutputFormatters.Add(jsonOutputFormatter);
+				options.OutputFormatters.Add(new XmlSerializerOutputFormatter());
+				
                 options.Filters.AddService(typeof(ExceptionFilter));
                 options.Filters.AddService(typeof(ValidationFilter));
                 //options.Filters.AddService(typeof(ApiResultFilter));
@@ -127,24 +163,13 @@ namespace Apic.Web.Extensions
 			mvc.ConfigureApiBehaviorOptions(options =>
 			{
 				options.SuppressModelStateInvalidFilter = true;
-				options.SuppressConsumesConstraintForFormFileParameters = true;
+				/*options.SuppressConsumesConstraintForFormFileParameters = true;
 				options.SuppressInferBindingSourcesForParameters = true;
 				options.SuppressMapClientErrors = true;
-				options.SuppressUseValidationProblemDetailsForInvalidModelStateResponses = true;
+				options.SuppressUseValidationProblemDetailsForInvalidModelStateResponses = true;*/
 			});
 
-		    mvc.AddXmlSerializerFormatters();
-
-            mvc.AddJsonOptions(jsonOptions =>
-			{
-				if (jsonOptions.SerializerSettings.ContractResolver != null)
-				{
-					jsonOptions.SerializerSettings.ContractResolver = new DefaultContractResolver()
-					{
-						NamingStrategy = new CamelCaseNamingStrategy(),
-					};
-				}
-			});
+		    mvc.AddJsonOptions(o => o.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
 
 			return services;
 		}

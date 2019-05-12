@@ -2,7 +2,7 @@
 
 namespace Apic.Entities.Orders
 {
-	public class OrderItem
+	public class OrderItem : IDomainEntity<Guid>
 	{
 		public Guid Id { get; set; }
 		public Guid OrderId { get; set; }

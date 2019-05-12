@@ -1,7 +1,7 @@
 using System;
 using System.Net;
 using System.Threading.Tasks;
-using Apic.Common.Configuration;
+using Apic.Common.Options;
 using Apic.Services.Throttling;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -34,7 +34,7 @@ namespace Apic.Web.Middlewares
                 if (throttlingDemoService.ThresholdExceeded(ipAddress, throttlingSettings.MaxRequestsPerMinute, period))
                 {
                     httpContext.Response.Clear();
-                    httpContext.Response.StatusCode = (int)HttpStatusCode.Conflict;
+                    httpContext.Response.StatusCode = StatusCodes.Status409Conflict;
                     await httpContext.Response.WriteAsync("IP Address Limit Exceeded");
                     return;
                 }

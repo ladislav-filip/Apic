@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Apic.Web.Cors;
 using Microsoft.AspNetCore.Builder;
+using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace Apic.Web.Extensions
 {
@@ -16,6 +17,10 @@ namespace Apic.Web.Extensions
 			app.UseSwaggerUI(x =>
 			{
 				x.SwaggerEndpoint("/swagger/v1/swagger.json", "API Documentation");
+				x.InjectStylesheet("css/swagger.css");
+				x.DisplayOperationId();
+				x.EnableFilter();
+				x.DocExpansion(DocExpansion.List);
 
 				x.RoutePrefix = string.Empty;
 			});

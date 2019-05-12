@@ -6,6 +6,7 @@ using Apic.Contracts.Infrastructure.Transfer;
 using Apic.Facades.Documents;
 using Apic.Services;
 using Apic.Web.Controllers._Base;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Apic.Web.Controllers
@@ -21,8 +22,8 @@ namespace Apic.Web.Controllers
 
 		[Route("documents/{id}")]
 		[HttpGet, HttpHead]
-        [ProducesResponseType(typeof(Result<Document>), (int)HttpStatusCode.Created)]
-		public async Task<IActionResult> Get(Guid id)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+		public async Task<ActionResult<Result<Document>>> GetDocuments(Guid id)
 		{
             Document result = await documentFacade.Get(id);
 

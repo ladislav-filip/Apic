@@ -25,11 +25,11 @@ namespace Apic.Web.Controllers
 
 		[Route("customers/{customerId}/documents")]
 		[HttpPost]
-		[ProducesResponseType(typeof(Result<Document>), (int)HttpStatusCode.Created)]
+		[ProducesResponseType(StatusCodes.Status201Created)]
 		[Consumes("multipart/form-data")]
 		[RequestFormLimits(MultipartBodyLengthLimit = 10_485_760)] // max 10 MB
 		[RequestSizeLimit(10_485_760)] // max 10 MB
-		public async Task<IActionResult> Upload(int customerId, IFormFile file, CancellationToken cancellationToken)
+		public async Task<ActionResult<Result<Document>>> CreateDocumentForCustomer(int customerId, IFormFile file, CancellationToken cancellationToken)
 		{
             Document result = await documentFacade.UploadDocument(customerId, new DocumentCreate()
 			{
@@ -43,11 +43,11 @@ namespace Apic.Web.Controllers
 
 		[Route("customers/{customerId}/documents/big")]
 		[HttpPost]
-		[ProducesResponseType(typeof(Result<Document>), (int)HttpStatusCode.Created)]
+		[ProducesResponseType(StatusCodes.Status201Created)]
 		[RequestFormLimits(MultipartBodyLengthLimit = 1073741824)] // 1 GB
 		[RequestSizeLimit(1073741824)] // 1 GB
 		[DisableFormValueModelBinding]
-		public async Task<IActionResult> UploadBig(int customerId, CancellationToken cancellationToken)
+		public async Task<ActionResult<Result<Document>>> CreateBigDocumentForCustomer(int customerId, CancellationToken cancellationToken)
 		{
 			DocumentCreate document = new DocumentCreate()
 			{

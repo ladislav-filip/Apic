@@ -4,7 +4,7 @@ using Apic.Entities.Customers;
 
 namespace Apic.Entities.Orders
 {
-	public class Order
+	public class Order : IDomainEntity<Guid>
 	{
 		public Guid Id { get; set; }
 		public int CustomerId { get; set; }

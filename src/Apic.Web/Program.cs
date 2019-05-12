@@ -24,6 +24,7 @@ namespace Apic.Web
                     .UseCustomizedBeatPulse()
                     .UseCustomizedLogging()
                     .UseApplicationInsights()
+                    .UseUrls("https://localhost:44342")
                     .UseStartup<Startup>()
                     .Build();
 
@@ -39,6 +40,8 @@ namespace Apic.Web
                 telemetryClient.TrackTrace("Startup Error");
                 telemetryClient.TrackException(e);
                 telemetryClient.Flush();
+
+                throw;
             }
         }
 
@@ -54,7 +57,7 @@ namespace Apic.Web
         {
             using (IServiceScope scope = webhost.Services.CreateScope())
             {
-                ApicDbContext dbContext = scope.ServiceProvider.GetService<ApicDbContext>();
+                IUnitOfWork dbContext = scope.ServiceProvider.GetService<IUnitOfWork>();
                 dbContext.Database.Migrate();
             }
         }

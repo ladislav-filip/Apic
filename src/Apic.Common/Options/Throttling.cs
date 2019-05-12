@@ -1,4 +1,4 @@
-﻿namespace Apic.Common.Configuration
+﻿namespace Apic.Common.Options
 {
     public class Throttling
     {

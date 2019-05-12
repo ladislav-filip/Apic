@@ -10,20 +10,20 @@ using Microsoft.EntityFrameworkCore;
 namespace Apic.Data.Repositories
 {
     [ScopedService]
-    public class DocumentRepository
+    public class DocumentRepository : BaseRepository<Document, Guid>
     {
-        private readonly ApicDbContext db;
+        private readonly DbSet<Document> set;
 
-        public DocumentRepository(ApicDbContext db)
+        public DocumentRepository(DbSet<Document> set) : base(set)
         {
-            this.db = db;
+            this.set = set;
         }
 
         public async Task<Document> GetSingle(Guid documentId)
         {
             try
             {
-                return await db.Set<Document>().SingleAsync(x => x.Id == documentId);
+                return await set.SingleAsync(x => x.Id == documentId);
             }
             catch (InvalidOperationException exception) when (exception.Message.Contains("Sequence contains"))
             {

@@ -5,12 +5,12 @@ namespace Apic.Tests.Facades
 {
 	public abstract class FacadeUnitTestBase
 	{
-		protected ApicDbContext GetInMemoryDbContext(bool isolated)
+		protected IUnitOfWork GetInMemoryDbContext(bool isolated)
 		{
-			DbContextOptionsBuilder<ApicDbContext> builder = new DbContextOptionsBuilder<ApicDbContext>()
+			DbContextOptionsBuilder<UnitOfWork> builder = new DbContextOptionsBuilder<UnitOfWork>()
 				.UseInMemoryDatabase("default");
 
-			ApicDbContext dbContext = new ApicDbContext(builder.Options);
+			IUnitOfWork dbContext = new UnitOfWork(builder.Options);
 
 			if (isolated)
 			{
@@ -22,9 +22,9 @@ namespace Apic.Tests.Facades
 			return dbContext;
 		}
 
-		private DbContextOptions<ApicDbContext> GetInMemoryOptions(string name = "Default")
+		private DbContextOptions<UnitOfWork> GetInMemoryOptions(string name = "Default")
 		{
-			return new DbContextOptionsBuilder<ApicDbContext>().UseInMemoryDatabase(name).Options;
+			return new DbContextOptionsBuilder<UnitOfWork>().UseInMemoryDatabase(name).Options;
 		}
 	}
 }

@@ -12,10 +12,10 @@ namespace Apic.Facades.Infrastructure
     {
         protected abstract Dictionary<string, string> PropertiesMap { get; }
 
-        protected readonly ApicDbContext Db;
+        protected readonly IUnitOfWork Db;
         protected readonly TS Filter;
 
-        protected QueryBase(ApicDbContext db, TS filter)
+        protected QueryBase(IUnitOfWork db, TS filter)
         {
             this.Db = db;
             this.Filter = filter;
