@@ -15,6 +15,8 @@ namespace Apic.Web.Extensions
 				config.AddJsonFile("appsettings.json", true);
 				config.AddJsonFile($"appsettings.{host.HostingEnvironment.EnvironmentName}.json", true);
 				
+				config.AddJsonFile("beatpulsesettings.json", true);
+				
 				config.AddIniFile("appsettings.ini", true);
 				config.AddIniFile($"appsettings.{host.HostingEnvironment.EnvironmentName}.ini", true);
 			});

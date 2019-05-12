@@ -1,0 +1,20 @@
+{
+  "BeatPulse-UI": {
+    "Liveness": [
+      {
+        "Name": "API Endpoints",
+        "Uri": "https://localhost:44342/hc?DetailedOutput=true"
+      }
+    ],
+    "Webhooks": [
+      {
+        "Name": "",
+        "Uri": "",
+        "Payload": "",
+        "RestoredPayload":""
+      }
+    ],
+    "EvaluationTimeOnSeconds": 10,
+    "MinimumSecondsBetweenFailureNotifications":60
+  }
+}

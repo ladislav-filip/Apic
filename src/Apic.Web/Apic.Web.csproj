@@ -26,6 +26,7 @@
   <ItemGroup>
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
 		<PackageReference Include="BeatPulse" Version="3.0.0" />
+		<PackageReference Include="BeatPulse.Sqlite" Version="3.0.0" />
 		<PackageReference Include="BeatPulse.SqlServer" Version="3.0.0" />
 		<PackageReference Include="BeatPulse.UI" Version="3.0.2" />
 		<PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="3.3.1" />

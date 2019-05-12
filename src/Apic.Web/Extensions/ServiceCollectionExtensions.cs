@@ -80,11 +80,10 @@ namespace Apic.Web.Extensions
 
         public static IServiceCollection AddCustomizedBeatPulse(this IServiceCollection services, IConfiguration configuration)
 		{
-			string sqlConnectionString = configuration.GetConnectionString("SqlLite");
-
 			services.AddBeatPulse(setup =>
 			{
-				setup.AddSqlServer(sqlConnectionString);
+				setup.AddSqlServer(configuration.GetConnectionString("SqlServer"));
+				setup.AddSqlite(configuration.GetConnectionString("SqlLite"));
 			});
 
             services.AddBeatPulseUI();
