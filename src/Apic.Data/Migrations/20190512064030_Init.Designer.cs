@@ -9,15 +9,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Apic.Data.Migrations
 {
-    [DbContext(typeof(ApicDbContext))]
-    [Migration("20181130185254_CustomerEmail")]
-    partial class CustomerEmail
+    [DbContext(typeof(UnitOfWork))]
+    [Migration("20190512064030_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -100,6 +100,8 @@ namespace Apic.Data.Migrations
 
                             b1.Property<string>("Street");
 
+                            b1.HasKey("CustomerId");
+
                             b1.ToTable("Customers");
 
                             b1.HasOne("Apic.Entities.Customers.Customer")
@@ -117,6 +119,8 @@ namespace Apic.Data.Migrations
                             b1.Property<string>("City");
 
                             b1.Property<string>("Street");
+
+                            b1.HasKey("CustomerId");
 
                             b1.ToTable("Customers");
 
