@@ -3,11 +3,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Apic.Data.Context;
 using Apic.Web.Extensions;
+using BeatPulse;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Apic.Web
@@ -16,20 +18,19 @@ namespace Apic.Web
     {
         public static async Task Main(string[] args)
         {
+            IWebHostBuilder builder = WebHost
+                .CreateDefaultBuilder(args)
+                .UseCustomizedConfigurationFiles()
+                .UseCustomizedBeatPulse()
+                .UseCustomizedLogging()
+                .UseApplicationInsights()
+                .UseUrls("https://localhost:44342")
+                .UseStartup<Startup>();
+            
             try
             {
-                IWebHost host = WebHost
-                    .CreateDefaultBuilder(args)
-                    .UseCustomizedConfigurationFiles()
-                    .UseCustomizedBeatPulse()
-                    .UseCustomizedLogging()
-                    .UseApplicationInsights()
-                    .UseUrls("https://localhost:44342")
-                    .UseStartup<Startup>()
-                    .Build();
-
+                IWebHost host = builder.Build();
                 ProcessCommands(args, host);
-
                 await host.RunAsync();
             }
             catch (Exception e)

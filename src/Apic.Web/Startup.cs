@@ -29,7 +29,7 @@ namespace Apic.Web
 
 		public IServiceProvider ConfigureServices(IServiceCollection services)
 		{
-		    services.AddCors();
+			services.AddCustomizedCors();
 		    services.AddCustomizedOptions(configuration);
             services.AddAuthentication();
             services.AddCustomizedAzureStorage();
@@ -37,7 +37,6 @@ namespace Apic.Web
             services.AddApplicationInsightsTelemetry(configuration);
 			services.AddCustomizedBeatPulse(configuration);
 		    services.AddResponseCaching();
-		    services.AddCustomizedCors();
 			services.AddCustomizedSwagger(configuration);
 		    services.AddCustomizedDbContext(configuration);
 		    services.AddHttpsRedirection(x => x.HttpsPort = 443);
@@ -55,7 +54,7 @@ namespace Apic.Web
         {
 	        app.UseBeatPulseUI();
 	        app.UseHsts();
-            app.UseCors();
+	        app.UseCustomizedCors();
             app.UseResponseCaching();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -64,7 +63,6 @@ namespace Apic.Web
             app.UseThrottlingMiddleware();
 	        app.UseCustomizedSwagger();
             app.UseCustomizedOptionsMethodMiddleware();
-            app.UseCustomizedCors();
             app.UseMvc();
         }
     }
