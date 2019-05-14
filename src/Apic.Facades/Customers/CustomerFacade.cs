@@ -5,7 +5,6 @@ using Apic.Common.Exceptions;
 using Apic.Contracts.Customers;
 using Apic.Contracts.Infrastructure.Transfer;
 using Apic.Data.Context;
-using Apic.Data.Repositories;
 using Apic.Facades.Customers.Queries;
 using Apic.Services;
 using AutoMapper;
@@ -19,13 +18,13 @@ namespace Apic.Facades.Customers
 	{
 		private readonly IUnitOfWork uow;
 		private readonly IMapper mapper;
-        private readonly ModelStateAccessor requestState;
+        private readonly ModelStateAccessor modelStateAccessor;
 
-		public CustomerFacade(IUnitOfWork uow, IMapper mapper, ModelStateAccessor requestState)
+		public CustomerFacade(IUnitOfWork uow, IMapper mapper, ModelStateAccessor modelStateAccessor)
 		{
 			this.uow = uow;
 			this.mapper = mapper;
-            this.requestState = requestState;
+            this.modelStateAccessor = modelStateAccessor;
         }
 
 		public async Task<Collection<Customer>> Get(CustomerFilter customerFilter)
@@ -38,12 +37,13 @@ namespace Apic.Facades.Customers
             // demo purpose only
 		    if (items.Count < result.TotalItems)
 		    {
-                requestState.Messages.Add("Use pagination for showing all records.");
+                modelStateAccessor.InfoMessages.Add("Use pagination for showing all records.");
 		    }
 
 		    return result;
 		}
 
+		
         public async Task<Customer> Get(int customerId)
 		{
             CustomerDbo customer = await uow.Customers.GetSingle(customerId);

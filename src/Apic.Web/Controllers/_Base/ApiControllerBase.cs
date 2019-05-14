@@ -24,7 +24,7 @@ namespace Apic.Web.Controllers._Base
         {
             var result = new Result<T>
             {
-                Messages = modelStateAccessor.Messages,
+                Messages = modelStateAccessor.InfoMessages,
                 Data = value
             };
 

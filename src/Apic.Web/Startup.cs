@@ -1,5 +1,7 @@
 using System;
 using Apic.DependencyInjection;
+using Apic.Facades.Customers;
+using Apic.Facades.Documents;
 using Apic.Web.Extensions;
 using Apic.Web.Middlewares;
 using BeatPulse.UI;
@@ -18,13 +20,11 @@ namespace Apic.Web
     {
 	    private readonly IHostingEnvironment hostingEnvironment;
 	    private readonly IConfiguration configuration;
-        private readonly ILogger<Startup> logger;
 
-		public Startup(IHostingEnvironment hostingEnvironment, IConfiguration configuration, ILogger<Startup> logger)
+		public Startup(IHostingEnvironment hostingEnvironment, IConfiguration configuration)
 		{
 			this.hostingEnvironment = hostingEnvironment;
 			this.configuration = configuration;
-            this.logger = logger;
         }
 
 		public IServiceProvider ConfigureServices(IServiceCollection services)
