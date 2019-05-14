@@ -25,7 +25,7 @@ namespace Apic.Data.Repositories
             {
                 return await set.SingleAsync(x => x.Id == documentId);
             }
-            catch (InvalidOperationException exception) when (exception.Message.Contains("Sequence contains"))
+            catch (InvalidOperationException exception)
             {
                 throw new ObjectNotFoundException("Document has not been found!");
             }
