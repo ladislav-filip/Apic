@@ -26,7 +26,6 @@ namespace Apic.Web
                 .UseApplicationInsights()
                 .UseUrls("https://localhost:44342")
                 .UseStartup<Startup>();
-            
             try
             {
                 IWebHost host = builder.Build();

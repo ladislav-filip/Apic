@@ -1,4 +1,5 @@
 using System;
+using Apic.Data.Repositories;
 using Apic.DependencyInjection;
 using Apic.Facades.Customers;
 using Apic.Facades.Documents;
@@ -41,7 +42,7 @@ namespace Apic.Web
 		    services.AddCustomizedDbContext(configuration);
 		    services.AddHttpsRedirection(x => x.HttpsPort = 443);
             services.AddCustomizedMvc();
-
+            
 			WindsorContainer container = new WindsorContainer();
 			container = container.RegisterServices(hostingEnvironment, configuration);
 
@@ -62,7 +63,6 @@ namespace Apic.Web
             app.UseAuthentication();
             app.UseThrottlingMiddleware();
 	        app.UseCustomizedSwagger();
-            app.UseCustomizedOptionsMethodMiddleware();
             app.UseMvc();
         }
     }
