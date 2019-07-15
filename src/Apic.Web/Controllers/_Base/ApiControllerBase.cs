@@ -11,6 +11,7 @@ namespace Apic.Web.Controllers._Base
 	[ProducesResponseType(typeof(StatusResults.ValidationProblemDetails), StatusCodes.Status400BadRequest)]
 	[ProducesResponseType(typeof(StatusResults.ProblemDetails), StatusCodes.Status404NotFound)]
 	[ProducesResponseType(typeof(StatusResults.ProblemDetails), StatusCodes.Status500InternalServerError)]
+    [ApiController]
 	public class ApiControllerBase : ControllerBase
     {
         private readonly ModelStateAccessor modelStateAccessor;

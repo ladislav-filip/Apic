@@ -1,5 +1,4 @@
-﻿using System.Net;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Apic.Contracts.Customers;
 using Apic.Contracts.Infrastructure.Transfer;
 using Apic.Facades.Customers;
@@ -46,6 +45,23 @@ namespace Apic.Web.Controllers
 		public async Task<ActionResult<Result<Customer>>> UpdateCustomer(int id, [FromBody]CustomerUpdate model)
 		{
             Customer result = await customerFacade.Update(id, model);
+
+			return Ok(result);
+		}
+		
+		[Route("customers/{id:int}/demo/novalidation")]
+		[HttpPut]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[IgnoreModelStateOnBinding]
+		public async Task<ActionResult<Result<Customer>>> UpdateCustomer2(int id, [FromBody]CustomerUpdate model)
+		{
+			// tento endpoint ignoruje na vstupu validaci přes [IgnoreModelStateOnBinding], musím si ji dělat sám
+			if (!ModelState.IsValid)
+			{
+				return BadRequest(ModelState);
+			}
+			
+			Customer result = await customerFacade.Update(id, model);
 
 			return Ok(result);
 		}

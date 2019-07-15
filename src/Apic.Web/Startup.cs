@@ -3,6 +3,7 @@ using Apic.Data.Repositories;
 using Apic.DependencyInjection;
 using Apic.Facades.Customers;
 using Apic.Facades.Documents;
+using Apic.Web.Cors;
 using Apic.Web.Extensions;
 using Apic.Web.Middlewares;
 using BeatPulse.UI;
@@ -14,6 +15,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace Apic.Web
 {
@@ -53,16 +55,40 @@ namespace Apic.Web
 
         public void Configure(IApplicationBuilder app)
         {
-	        app.UseBeatPulseUI();
+	        app.UseMiddleware<ErrorHandlingMiddleware>();
+	        
 	        app.UseHsts();
-	        app.UseCustomizedCors();
+	        app.UseHttpsRedirection();
+	        
+	        app.UseBeatPulse(options =>
+	        {
+		        options.ConfigurePath("hc")
+			        .ConfigureTimeout(1500)
+			        .ConfigureDetailedOutput(true, true);
+	        });
+	        
+	        app.UseBeatPulseUI();
+	        
+	        app.UseSwagger();
+	        app.UseSwaggerUI(x =>
+	        {
+		        x.SwaggerEndpoint("/swagger/v1/swagger.json", "API Documentation");
+		        x.InjectStylesheet("css/swagger.css");
+		        x.DisplayOperationId();
+		        x.EnableFilter();
+		        x.DocExpansion(DocExpansion.List);
+
+		        x.RoutePrefix = string.Empty;
+	        });
+	        
+	        app.UseCors(CorsPolicies.Default);
             app.UseResponseCaching();
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-	        app.UseCustomizedExceptionHandling();
+            app.UseStaticFiles();	
+            
             app.UseAuthentication();
-            app.UseThrottlingMiddleware();
-	        app.UseCustomizedSwagger();
+            
+            app.UseMiddleware<ThrottlingMiddleware>();
+            
             app.UseMvc();
         }
     }

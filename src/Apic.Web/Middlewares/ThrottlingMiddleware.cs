@@ -52,12 +52,4 @@ namespace Apic.Web.Middlewares
             return request.Path.Value.Contains("/api/");
         }
     }
-
-    public static class ThrottlingMiddlewareExtensions
-    {
-        public static IApplicationBuilder UseThrottlingMiddleware(this IApplicationBuilder builder)
-        {
-            return builder.UseMiddleware<ThrottlingMiddleware>();
-        }
-    }
 }

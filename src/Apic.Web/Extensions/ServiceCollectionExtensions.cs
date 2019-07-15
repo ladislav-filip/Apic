@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Swagger;
@@ -118,6 +119,10 @@ namespace Apic.Web.Extensions
 		{
 			services.Configure<AppSettings>(configuration);
 			services.Configure<Throttling>(configuration.GetSection("Throttling"));
+			services.Configure<ConsoleLifetimeOptions>(options =>
+			{
+				options.SuppressStatusMessages = true;
+			});
 
 			return services;
 		}
@@ -163,11 +168,9 @@ namespace Apic.Web.Extensions
 
 			mvc.ConfigureApiBehaviorOptions(options =>
 			{
+				// vypnutí validačního mechanismu
+				// řeším to sám pomocí ValidationFilteru
 				options.SuppressModelStateInvalidFilter = true;
-				/*options.SuppressConsumesConstraintForFormFileParameters = true;
-				options.SuppressInferBindingSourcesForParameters = true;
-				options.SuppressMapClientErrors = true;
-				options.SuppressUseValidationProblemDetailsForInvalidModelStateResponses = true;*/
 			});
 
 		    mvc.AddJsonOptions(o => o.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());

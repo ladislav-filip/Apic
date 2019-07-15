@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Apic.Data.Context;
@@ -21,9 +22,7 @@ namespace Apic.Web
             IWebHostBuilder builder = WebHost
                 .CreateDefaultBuilder(args)
                 .UseCustomizedConfigurationFiles()
-                .UseCustomizedBeatPulse()
                 .UseCustomizedLogging()
-                .UseApplicationInsights()
                 .UseUrls("https://localhost:44342")
                 .UseStartup<Startup>();
             try
@@ -34,7 +33,12 @@ namespace Apic.Web
             }
             catch (Exception e)
             {
-                TelemetryConfiguration.Active.InstrumentationKey = "663d2b21-f9d7-4a2a-a398-8de4f92fdf5a";
+                IConfiguration fallbackConfig = new ConfigurationBuilder()
+                    .AddInMemoryCollection(new[] {new KeyValuePair<string, string>("AICriticalKey", "663d2b21-f9d7-4a2a-a398-8de4f92fdf5a")})
+                    .AddEnvironmentVariables()
+                    .Build();
+                
+                TelemetryConfiguration.Active.InstrumentationKey = fallbackConfig["AICriticalKey"];
                 var telemetryClient = new TelemetryClient();
 
                 telemetryClient.TrackTrace("Startup Error");

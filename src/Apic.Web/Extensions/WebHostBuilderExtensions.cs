@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace Apic.Web.Extensions
 {
@@ -15,7 +16,7 @@ namespace Apic.Web.Extensions
 				config.AddJsonFile("appsettings.json", true);
 				config.AddJsonFile($"appsettings.{host.HostingEnvironment.EnvironmentName}.json", true);
 				
-				config.AddJsonFile("beatpulsesettings.json", true);
+				config.AddJsonFile("beatpulse.json", true);
 				
 				config.AddIniFile("appsettings.ini", true);
 				config.AddIniFile($"appsettings.{host.HostingEnvironment.EnvironmentName}.ini", true);
@@ -28,21 +29,12 @@ namespace Apic.Web.Extensions
 		{
 			return webHost.ConfigureLogging(builder =>
 			{
-				
+				builder.AddConsole();
+				builder.AddDebug();
+				builder.AddEventSourceLogger();
+				builder.AddApplicationInsights();
 			});
 		}
 
-		public static IWebHostBuilder UseCustomizedBeatPulse(this IWebHostBuilder webHost)
-		{
-			webHost = webHost.UseBeatPulse(options =>
-			{
-				options.ConfigurePath("hc")
-					.ConfigureTimeout(1500)
-					.ConfigureDetailedOutput(true, true);
-			});
-
-			return webHost;
-		}
-        
 	}
 }

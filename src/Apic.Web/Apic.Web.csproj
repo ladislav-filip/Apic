@@ -2,8 +2,10 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp2.2</TargetFramework>
-        <LangVersion>latest</LangVersion>
+        <LangVersion>7.3</LangVersion>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+        <TieredCompilation>true</TieredCompilation>
         <NoWarn>1701;1702;1705;1591</NoWarn>
     </PropertyGroup>
 
@@ -27,6 +29,7 @@
         <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Api.Analyzers" Version="2.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging.ApplicationInsights" Version="2.10.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
         <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="4.0.1" />
         <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="4.5.5" />
@@ -37,6 +40,13 @@
         <ProjectReference Include="..\Apic.Contracts\Apic.Contracts.csproj" />
         <ProjectReference Include="..\Apic.DependencyInjection\Apic.DependencyInjection.csproj" />
         <ProjectReference Include="..\Apic.Facades\Apic.Facades.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="appsettings.ini" />
+      <Content Include="appsettings.ini">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>

@@ -13,6 +13,7 @@ namespace Apic.Web.Filters.Exception
 {
     /// <summary>
     /// V případě výjimky v rámci MVC request pipeline se pokusí nastavit vhodný status. Výchozí je klasická výjimka (500)
+    /// Primárně je to dobré místo pro pohodlnou práci s custom výjimkami v rámci MVC invocation pipeline
     /// </summary>
     public class ExceptionFilter : IExceptionFilter
     {

@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Refit" Version="4.7.9" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Apic.Contracts\Apic.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>

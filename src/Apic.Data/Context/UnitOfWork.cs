@@ -22,6 +22,12 @@ namespace Apic.Data.Context
 		{
 		}
 
+		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+		{
+			optionsBuilder.EnableSensitiveDataLogging(true);
+			optionsBuilder.EnableDetailedErrors(true);
+		}
+
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			modelBuilder.ApplyConfigurationsFromAssembly(typeof(EfCoreEntitiesFlag).Assembly);
