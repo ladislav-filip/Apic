@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json;
 using Apic.Common.Options;
 using Apic.Contracts.Customers;
 using Apic.Data.Context;
@@ -21,6 +22,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Net.Http.Headers;
+using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -36,7 +38,7 @@ namespace Apic.Web.Extensions
 			
 			services.AddSwaggerGen(x =>
 			{
-				x.SwaggerDoc("v1", new Info
+				x.SwaggerDoc("v1", new OpenApiInfo
 				{
 					Title = "API Documentation",
 					Version = "v1",
@@ -49,10 +51,8 @@ namespace Apic.Web.Extensions
                 
 				// všechno camelcase
 				x.DescribeAllParametersInCamelCase();
-				x.DescribeStringEnumsInCamelCase();
                 
 				x.EnableAnnotations();
-				x.DescribeAllEnumsAsStrings();
 			});
 
 			return services;
@@ -127,12 +127,12 @@ namespace Apic.Web.Extensions
 			return services;
 		}
 
-		public static IServiceCollection AddCustomizedMvc(this IServiceCollection services)
+		public static IServiceCollection AddCustomizedControllers(this IServiceCollection services)
 		{
             services.AddScoped<ExceptionFilter>();
             services.AddScoped<ValidationFilter>();
 
-            IMvcBuilder mvc = services.AddMvc(options =>
+            IMvcBuilder mvc = services.AddControllers(options =>
 			{
 				options.ReturnHttpNotAcceptable = true;
 				options.RespectBrowserAcceptHeader = true;
@@ -143,13 +143,13 @@ namespace Apic.Web.Extensions
 				options.FormatterMappings.SetMediaTypeMappingForFormat("json", MediaTypeHeaderValue.Parse("application/json"));
 
 				// zapojení input formatters ve správném pořadí
-				var jsonInputFormatter = options.InputFormatters.FirstOrDefault(x => x.GetType() == typeof(JsonInputFormatter));
+				var jsonInputFormatter = options.InputFormatters.FirstOrDefault(x => x.GetType() == typeof(SystemTextJsonInputFormatter));
 				options.InputFormatters.Clear();
 				options.InputFormatters.Add(jsonInputFormatter);
 				options.InputFormatters.Add(new XmlSerializerInputFormatter(new MvcOptions()));
 
 				// zapojení output formatters ve správném pořadí
-				var jsonOutputFormatter = options.OutputFormatters.FirstOrDefault(x => x.GetType() == typeof(JsonOutputFormatter));
+				var jsonOutputFormatter = options.OutputFormatters.FirstOrDefault(x => x.GetType() == typeof(SystemTextJsonOutputFormatter));
 				options.OutputFormatters.Clear();
 				options.OutputFormatters.Add(jsonOutputFormatter);
 				options.OutputFormatters.Add(new XmlSerializerOutputFormatter());
@@ -164,16 +164,18 @@ namespace Apic.Web.Extensions
 				options.MultipartBodyLengthLimit = 1_048_576; // 1 MB
 			});
 
-			mvc.SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+			mvc.SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
 			mvc.ConfigureApiBehaviorOptions(options =>
 			{
-				// vypnutí validačního mechanismu
-				// řeším to sám pomocí ValidationFilteru
-				options.SuppressModelStateInvalidFilter = true;
+				// výchozí nastavení validačního mechanismu
 			});
 
-		    mvc.AddJsonOptions(o => o.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
+		    mvc.AddJsonOptions(o =>
+		    {
+			    o.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+			    o.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+		    });
 
 			return services;
 		}

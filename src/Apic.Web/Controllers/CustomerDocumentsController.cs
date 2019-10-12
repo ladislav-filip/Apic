@@ -18,7 +18,7 @@ namespace Apic.Web.Controllers
 	{
 		private readonly IDocumentFacade documentFacade;
 
-		public DocumentsController(IDocumentFacade documentFacade, ModelStateAccessor modelStateAccessor) : base(modelStateAccessor)
+		public DocumentsController(IDocumentFacade documentFacade)
 		{
 			this.documentFacade = documentFacade;
 		}
@@ -29,7 +29,7 @@ namespace Apic.Web.Controllers
 		[Consumes("multipart/form-data")]
 		[RequestFormLimits(MultipartBodyLengthLimit = 10_485_760)] // max 10 MB
 		[RequestSizeLimit(10_485_760)] // max 10 MB
-		public async Task<ActionResult<Result<Document>>> CreateDocumentForCustomer(int customerId, IFormFile file, CancellationToken cancellationToken)
+		public async Task<ActionResult<Document>> CreateDocumentForCustomer(int customerId, IFormFile file, CancellationToken cancellationToken)
 		{
             Document result = await documentFacade.UploadDocument(customerId, new DocumentCreate()
 			{
@@ -47,7 +47,7 @@ namespace Apic.Web.Controllers
 		[RequestFormLimits(MultipartBodyLengthLimit = 1073741824)] // 1 GB
 		[RequestSizeLimit(1073741824)] // 1 GB
 		[DisableFormValueModelBinding]
-		public async Task<ActionResult<Result<Document>>> CreateBigDocumentForCustomer(int customerId, CancellationToken cancellationToken)
+		public async Task<ActionResult<Document>> CreateBigDocumentForCustomer(int customerId, CancellationToken cancellationToken)
 		{
 			DocumentCreate document = new DocumentCreate()
 			{

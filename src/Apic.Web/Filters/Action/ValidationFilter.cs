@@ -23,13 +23,7 @@ namespace Apic.Web.Filters.Action
 
         public void OnActionExecuting(ActionExecutingContext context)
 		{
-            CopyModelStateToModelStateAccessor(context);
-
-            if (!context.ModelState.IsValid && !context.ActionDescriptor.ContainsFilter(typeof(IgnoreModelStateOnBinding)))
-            {
-                ValidationProblemDetails message = ValidationProblemDetails.FromErrors(context.ModelState.ToValidationErrorMessages());
-                context.Result = new BadRequestObjectResult(message);
-            }
+            modelStateAccessor.ModelState = context.ModelState;
 		}
 
         public void OnActionExecuted(ActionExecutedContext context)
@@ -39,11 +33,6 @@ namespace Apic.Web.Filters.Action
                 var message = ValidationProblemDetails.FromErrors(context.ModelState.ToValidationErrorMessages());
                 context.Result = new BadRequestObjectResult(message);
             }
-        }
-
-        private void CopyModelStateToModelStateAccessor(ActionExecutingContext context)
-        {
-            modelStateAccessor.ModelState = context.ModelState;
         }
     }
 }

@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace Apic.Web
 {
@@ -19,25 +21,57 @@ namespace Apic.Web
     {
         public static async Task Main(string[] args)
         {
-            IWebHostBuilder builder = WebHost
+            IHostBuilder hostBuilder = Host
                 .CreateDefaultBuilder(args)
-                .UseCustomizedConfigurationFiles()
-                .UseCustomizedLogging()
-                .UseUrls("https://localhost:44342")
-                .UseStartup<Startup>();
+                .ConfigureWebHostDefaults(webhostBuilder =>
+                {
+                    webhostBuilder
+                        .UseStartup<Startup>()
+                        .UseUrls("https://localhost:44342")
+                        
+                        .ConfigureAppConfiguration((host, config) =>
+                        {
+                            config.Sources.Clear();
+
+                            config.AddJsonFile("appsettings.json", true);
+                            config.AddJsonFile($"appsettings.{host.HostingEnvironment.EnvironmentName}.json", true);
+
+                            config.AddJsonFile("beatpulse.json", true);
+
+                            config.AddIniFile("appsettings.ini", true);
+                            config.AddIniFile($"appsettings.{host.HostingEnvironment.EnvironmentName}.ini", true);
+                        })
+                        
+                        .ConfigureLogging(builder =>
+                        {
+                            builder.AddConsole();
+                            builder.AddDebug();
+                            builder.AddEventSourceLogger();
+                            builder.AddApplicationInsights();
+                        });
+                });
             try
             {
-                IWebHost host = builder.Build();
-                ProcessCommands(args, host);
+                IHost host = hostBuilder.Build();
+
+                if (!args.Contains("skipmigrations"))
+                {
+                    MigrateDatabase(host);
+                }
+
                 await host.RunAsync();
             }
             catch (Exception e)
             {
                 IConfiguration fallbackConfig = new ConfigurationBuilder()
-                    .AddInMemoryCollection(new[] {new KeyValuePair<string, string>("AICriticalKey", "663d2b21-f9d7-4a2a-a398-8de4f92fdf5a")})
+                    .AddInMemoryCollection(new[]
+                    {
+                        new KeyValuePair<string, string>("AICriticalKey",
+                            "663d2b21-f9d7-4a2a-a398-8de4f92fdf5a")
+                    })
                     .AddEnvironmentVariables()
                     .Build();
-                
+
                 TelemetryConfiguration.Active.InstrumentationKey = fallbackConfig["AICriticalKey"];
                 var telemetryClient = new TelemetryClient();
 
@@ -49,15 +83,7 @@ namespace Apic.Web
             }
         }
 
-        private static void ProcessCommands(string[] args, IWebHost host)
-        {
-            if (!args.Contains("disablemigrations"))
-            {
-                MigrateDatabase(host);
-            }
-        }
-
-        private static void MigrateDatabase(IWebHost webhost)
+        private static void MigrateDatabase(IHost webhost)
         {
             using (IServiceScope scope = webhost.Services.CreateScope())
             {

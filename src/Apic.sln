@@ -15,8 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Apic.Services", "Apic.Servi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Apic.Data", "Apic.Data\Apic.Data.csproj", "{C25BEA41-E5EE-41AF-A1AE-3A62C4590BDD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Apic.DependencyInjection", "Apic.DependencyInjection\Apic.DependencyInjection.csproj", "{93472D3D-148C-478B-9986-83BD83CC73BA}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Apic.Common", "Apic.Common\Apic.Common.csproj", "{F39C084A-A3B2-41CB-ACA7-26EF6DDD746C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{490205DE-41DA-46FB-9344-4A2460FB2E5F}"
@@ -57,10 +55,6 @@ Global
 		{C25BEA41-E5EE-41AF-A1AE-3A62C4590BDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C25BEA41-E5EE-41AF-A1AE-3A62C4590BDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C25BEA41-E5EE-41AF-A1AE-3A62C4590BDD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{93472D3D-148C-478B-9986-83BD83CC73BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{93472D3D-148C-478B-9986-83BD83CC73BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{93472D3D-148C-478B-9986-83BD83CC73BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{93472D3D-148C-478B-9986-83BD83CC73BA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F39C084A-A3B2-41CB-ACA7-26EF6DDD746C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F39C084A-A3B2-41CB-ACA7-26EF6DDD746C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F39C084A-A3B2-41CB-ACA7-26EF6DDD746C}.Release|Any CPU.ActiveCfg = Release|Any CPU

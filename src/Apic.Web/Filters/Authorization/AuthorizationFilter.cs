@@ -17,7 +17,7 @@ namespace Apic.Web.Filters.Authorization
             if(context.HttpContext.User != null)
             {
                 // něco
-                //context.Result
+                // context.Result
             }
         }
     }

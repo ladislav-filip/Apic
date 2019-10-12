@@ -15,15 +15,15 @@ namespace Apic.Web.Controllers
 	{
 		private readonly IDocumentFacade documentFacade;
 
-		public CustomerDocumentsController(IDocumentFacade documentFacade, ModelStateAccessor modelStateAccessor) : base(modelStateAccessor)
+		public CustomerDocumentsController(IDocumentFacade documentFacade)
 		{
 			this.documentFacade = documentFacade;
 		}
 
 		[Route("documents/{id}")]
 		[HttpGet, HttpHead]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-		public async Task<ActionResult<Result<Document>>> GetDocuments(Guid id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+		public async Task<ActionResult<Document>> GetDocuments(Guid id)
 		{
             Document result = await documentFacade.Get(id);
 

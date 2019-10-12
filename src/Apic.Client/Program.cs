@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Apic.Contracts.Customers;
+using Apic.Contracts.Infrastructure.Transfer;
 using Refit;
 
 namespace Apic.Client
@@ -12,7 +13,7 @@ namespace Apic.Client
         {
             var gitHubApi = RestService.For<IApicApi>("https://localhost:44342");
             
-            var customers = await gitHubApi.GetCustomers(new CustomerFilter {Page = 1, PageSize = 2});
+            Collection<Customer> customers = await gitHubApi.GetCustomers(new CustomerFilter {Page = 1, PageSize = 2});
             
             // var customer = await gitHubApi.GetCustomer(1)
         }

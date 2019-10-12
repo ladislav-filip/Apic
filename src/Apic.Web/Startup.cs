@@ -1,36 +1,34 @@
-using System;
+using Apic.Common.Attributes;
+using Apic.Common.Exceptions;
 using Apic.Data.Repositories;
-using Apic.DependencyInjection;
 using Apic.Facades.Customers;
-using Apic.Facades.Documents;
+using Apic.Facades.Mappers.Resolvers;
+using Apic.Services;
+using Apic.Services.Throttling;
 using Apic.Web.Cors;
 using Apic.Web.Extensions;
 using Apic.Web.Middlewares;
 using BeatPulse.UI;
-using Castle.Windsor;
-using Castle.Windsor.MsDependencyInjection;
-using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace Apic.Web
 {
     public class Startup
     {
-	    private readonly IHostingEnvironment hostingEnvironment;
+	    private readonly IWebHostEnvironment hostingEnvironment;
 	    private readonly IConfiguration configuration;
 
-		public Startup(IHostingEnvironment hostingEnvironment, IConfiguration configuration)
+		public Startup(IWebHostEnvironment hostingEnvironment, IConfiguration configuration)
 		{
 			this.hostingEnvironment = hostingEnvironment;
 			this.configuration = configuration;
         }
 
-		public IServiceProvider ConfigureServices(IServiceCollection services)
+		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddCustomizedCors();
 		    services.AddCustomizedOptions(configuration);
@@ -43,14 +41,29 @@ namespace Apic.Web
 			services.AddCustomizedSwagger(configuration);
 		    services.AddCustomizedDbContext(configuration);
 		    services.AddHttpsRedirection(x => x.HttpsPort = 443);
-            services.AddCustomizedMvc();
+            services.AddCustomizedControllers();
+
+            services.Scan(selector => selector
+	            .FromAssemblyOf<IApiException>()
+	            .AddClasses(x => x.AssignableTo<IApiException>())
+	            .AsImplementedInterfaces()
+	            .WithTransientLifetime());
             
-			WindsorContainer container = new WindsorContainer();
-			container = container.RegisterServices(hostingEnvironment, configuration);
+            services.Scan(selector => selector
+	            .FromAssemblyOf<CustomerFacade>()
+	            .AddClasses(x => x.WithAttribute<ScopedServiceAttribute>())
+	            .AsMatchingInterface()
+	            .WithScopedLifetime());
+            
+            services.Scan(selector => selector
+	            .FromAssemblyOf<CustomerRepository>()
+	            .AddClasses(x => x.WithAttribute<ScopedServiceAttribute>())
+	            .AsMatchingInterface()
+	            .WithScopedLifetime());
 
-            IServiceProvider provider = WindsorRegistrationHelper.CreateServiceProvider(container, services);
-
-            return provider;
+            services.AddScoped<ModelStateAccessor>();
+            services.AddTransient<BlobUrlValueResolver>();
+            services.AddSingleton<ThrottlingDemoService>();
 		}
 
         public void Configure(IApplicationBuilder app)
@@ -69,6 +82,8 @@ namespace Apic.Web
 	        
 	        app.UseBeatPulseUI();
 	        
+	        app.UseStaticFiles();
+	        
 	        app.UseSwagger();
 	        app.UseSwaggerUI(x =>
 	        {
@@ -81,15 +96,15 @@ namespace Apic.Web
 		        x.RoutePrefix = string.Empty;
 	        });
 	        
+	        app.UseRouting();
 	        app.UseCors(CorsPolicies.Default);
             app.UseResponseCaching();
-            app.UseStaticFiles();	
-            
             app.UseAuthentication();
-            
             app.UseMiddleware<ThrottlingMiddleware>();
-            
-            app.UseMvc();
+            app.UseEndpoints(builder =>
+            {
+	            builder.MapControllers();
+            });
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Net;
-using Apic.Contracts.Infrastructure.Transfer;
-using Apic.Services;
+﻿using Apic.Contracts.Infrastructure.Transfer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StatusResults = Apic.Contracts.Infrastructure.Transfer.StatusResults;
@@ -14,22 +12,8 @@ namespace Apic.Web.Controllers._Base
     [ApiController]
 	public class ApiControllerBase : ControllerBase
     {
-        private readonly ModelStateAccessor modelStateAccessor;
-
-        public ApiControllerBase(ModelStateAccessor modelStateAccessor)
+        public ApiControllerBase()
         {
-            this.modelStateAccessor = modelStateAccessor;
-        }
-
-        public OkObjectResult Ok<T>(T value)
-        {
-            var result = new Result<T>
-            {
-                Messages = modelStateAccessor.InfoMessages,
-                Data = value
-            };
-
-            return base.Ok(result);
         }
     }
 }
