@@ -7,10 +7,6 @@
         <NoWarn>1701;1702;1705;1591</NoWarn>
     </PropertyGroup>
 
-    <PropertyGroup>
-        <TrimUnusedDependencies>true</TrimUnusedDependencies>
-    </PropertyGroup>
-
     <ItemGroup>
         <Folder Include="App_Data" />
     </ItemGroup>
@@ -34,7 +30,6 @@
     <ItemGroup>
         <ProjectReference Include="..\Apic.Common\Apic.Common.csproj" />
         <ProjectReference Include="..\Apic.Contracts\Apic.Contracts.csproj" />
-        <ProjectReference Include="..\Apic.DependencyInjection\Apic.DependencyInjection.csproj" />
         <ProjectReference Include="..\Apic.Facades\Apic.Facades.csproj" />
     </ItemGroup>
 
@@ -43,6 +38,42 @@
         <Content Include="appsettings.ini">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <DocFileItem Remove="obj\Debug\netcoreapp3.0\Apic.Web.xml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ResolveComReferenceCache Remove="obj\Debug\netcoreapp3.0\Apic.Web.csproj.ResolveComReference.cache" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <IntermediateAssembly Remove="obj\Debug\netcoreapp3.0\Apic.Web.dll" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_DebugSymbolsIntermediatePath Remove="obj\Debug\netcoreapp3.0\Apic.Web.pdb" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_DeploymentManifestEntryPoint Remove="obj\Debug\netcoreapp3.0\Apic.Web.dll" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ApplicationManifest Remove="obj\Debug\netcoreapp3.0\Apic.Web.dll.manifest" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <DeployManifest Remove="obj\Debug\netcoreapp3.0\Apic.Web.application" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ClsidMap Remove="obj\Debug\netcoreapp3.0\Apic.Web.clsidmap" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <RegFreeComManifest Remove="obj\Debug\netcoreapp3.0\Apic.Web.X.manifest" />
     </ItemGroup>
 
 </Project>
